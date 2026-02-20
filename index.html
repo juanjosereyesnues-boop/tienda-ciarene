@@ -198,7 +198,7 @@
     </div>
 
     <script>
-        const API_URL = "http://192.168.1.15:5000/api/productos";
+        const API_URL = "ciarene.up.railway.app";
         let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
 
         async function cargarProductos() {
@@ -249,4 +249,5 @@
         window.onload = cargarProductos;
     </script>
 </body>
+
 </html>
