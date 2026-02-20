@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciarené | Moda con Estilo</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --dark: #1a1a1a;
+            --light: #fdfdfd;
+            --ws: #25D366;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            margin: 0;
+            color: var(--dark);
+        }
+
+        header {
+            background: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            color: var(--dark);
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        header span { color: var(--primary); }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        .grid-productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s ease;
+            border: 1px solid #eee;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        .badge-oferta {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+
+        .card-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .precio-viejo {
+            text-decoration: line-through;
+            color: #b2bec3;
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+
+        .precio-actual {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .btn-add {
+            background: var(--dark);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-add:hover { background: var(--primary); }
+
+        /* Spinner */
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            width: 100%;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #eee;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Carrito Flotante */
+        .cart-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--ws);
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 2000;
+            transition: 0.3s;
+        }
+
+        .cart-float:hover { transform: scale(1.1); }
+
+        .cart-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary);
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="animate__animated animate__fadeInDown">CIARE<span>NÉ</span></h1>
+        <p>Moda Exclusiva A Buen Precio 🛒 </p>
+    </header>
+
+    <div class="container">
+        <div id="productos" class="grid-productos">
+            <div class="loader"><div class="spinner"></div></div>
+        </div>
+    </div>
+
+    <div class="cart-float animate__animated animate__bounceIn" onclick="window.location.href='carrito.html'">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-count" id="cart-count">0</span>
+    </div>
+
+    <script>
+        const API_URL = "http://192.168.1.15:5000/api/productos";
+        let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
+
+        async function cargarProductos() {
+            try {
+                const res = await fetch(API_URL);
+                const json = await res.json();
+                const container = document.getElementById('productos');
+                container.innerHTML = '';
+
+                json.data.forEach((p, i) => {
+                    const tieneOferta = p.precio_viejo != null;
+                    container.innerHTML += `
+                        <div class="card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s">
+                            ${tieneOferta ? '<div class="badge-oferta">OFERTA 💰</div>' : ''}
+                            <img src="${p.imagen}" onerror="this.src='https://via.placeholder.com/350x450?text=Ciarené+Moda'">
+                            <div class="card-info">
+                                <h3>${p.nombre}</h3>
+                                <div>
+                                    ${tieneOferta ? `<span class="precio-viejo">$${p.precio_viejo.toLocaleString()}</span>` : ''}
+                                    <span class="precio-actual">$${p.precio.toLocaleString()}</span>
+                                </div>
+                                <button class="btn-add" onclick="agregar('${p.nombre}', ${p.precio})">
+                                    <i class="fas fa-plus"></i> Añadir
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                actualizarContador();
+            } catch (e) {
+                document.getElementById('productos').innerHTML = "Se A Producio Un Error, Estamos En Ello";
+            }
+        }
+
+        function agregar(n, p) {
+            carrito.push({ nombre: n, precio: p });
+            localStorage.setItem('carrito_ciarene', JSON.stringify(carrito));
+            actualizarContador();
+            // Animación pequeña al botón
+            event.target.innerHTML = "¡Añadido!";
+            setTimeout(() => { event.target.innerHTML = '<i class="fas fa-plus"></i> Añadir'; }, 1000);
+        }
+
+        function actualizarContador() {
+            document.getElementById('cart-count').innerText = carrito.length;
+        }
+
+        window.onload = cargarProductos;
+    </script>
+</body>
+</html>

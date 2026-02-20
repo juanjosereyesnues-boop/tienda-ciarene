@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Carrito Ciarené</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --primary-dark: #cc3d57;
+            --secondary: #25D366;
+            --dark: #2d3436;
+            --light: #f9f9f9;
+            --gray: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            margin: 0;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .checkout-card {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            animation: animate__fadeInUp 0.8s;
+        }
+
+        .checkout-card h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .item-list {
+            border-top: 1px solid var(--gray);
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--gray);
+            font-size: 1.1rem;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item span:first-child {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .cart-item-remove {
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .cart-item-remove:hover {
+            color: var(--primary-dark);
+        }
+
+        .total-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid var(--primary);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .btn-checkout {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-checkout:hover {
+            background-color: #1ebc59;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-clear-cart {
+            background: #f0f0f0;
+            color: #666;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-top: 15px;
+            width: 100%;
+        }
+        .btn-clear-cart:hover {
+            background: #e0e0e0;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Mensaje de carrito vacío */
+        .empty-cart-message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #888;
+            margin-top: 50px;
+        }
+        .empty-cart-message i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="checkout-card animate__animated animate__fadeInUp">
+        <h2>Tu Pedido <span style="color:#ff0000">📃</span></h2>
+        
+        <div id="lista-carrito" class="item-list">
+            </div>
+
+        <div class="total-section">
+            <span>Total:</span>
+            <span id="total-pago">$0</span>
+        </div>
+        
+        <button class="btn-checkout" onclick="enviarPedidoFinal()">
+            <i class="fab fa-whatsapp"></i> Confirmar y Enviar Pedido
+        </button>
+        
+        <button class="btn-clear-cart" onclick="vaciarCarrito()">
+            <i class="fas fa-trash-alt"></i> Vaciar Carrito
+        </button>
+        
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Seguir comprando
+        </a>
+    </div>
+
+    <script>
+        const TELEFONO_MAMA = "573122997227";
+        const CART_KEY = 'carrito_ciarene';
+
+        function mostrarCarrito() {
+            let carrito = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+            const lista = document.getElementById('lista-carrito');
+            let total = 0;
+
+            lista.innerHTML = ''; // Limpiar lista antes de añadir
+            
+            if (carrito.length === 0) {
+                lista.innerHTML = `
+                    <div class="empty-cart-message">
+                        <i class="fas fa-box-open"></i>
+                        <p>Tu carrito está vacío, ¡vamos de compras!</p>
+                    </div>
+                `;
+                document.getElementById('total-pago').innerText = "$0";
+                document.querySelector('.btn-checkout').disabled = true; // Deshabilita el botón si no hay nada
+                document.querySelector('.btn-checkout').style.backgroundColor = '#ccc';
+                document.querySelector('.btn-clear-cart').style.display = 'none';
+                return;
+            }
+
+            carrito.forEach((p, index) => {
+                total += p.precio;
+                lista.innerHTML += `
+                    <div class="cart-item animate__animated animate__fadeIn">
+                        <span>${p.nombre}</span>
+                        <div>
+                            <span>$${p.precio.toLocaleString('es-CO')}</span>
+                            <i class="fas fa-times cart-item-remove" onclick="eliminarDelCarrito(${index})"></i>
+                        </div>
+                    </div>`;
+            });
+
+            document.getElementById('total-pago').innerText = `$${total.toLocaleString('es-CO')}`;
+            document.querySelector('.btn-checkout').disabled = false; // Habilita el botón
+            document.querySelector('.btn-checkout').style.backgroundColor = 'var(--secondary)';
+            document.querySelector('.btn-clear-cart').style.display = 'block';
+        }
+
+        function eliminarDelCarrito(index) {
+            let carrito = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+            carrito.splice(index, 1); // Elimina el elemento en el índice dado
+            localStorage.setItem(CART_KEY, JSON.stringify(carrito));
+            mostrarCarrito(); // Vuelve a renderizar el carrito
+            // Actualizar el contador en la página principal si estuviera abierta
+            if (window.opener && window.opener.updateCartCount) {
+                window.opener.updateCartCount();
+            }
+        }
+
+        function enviarPedidoFinal() {
+            const carrito = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+            if (carrito.length === 0) {
+                alert("¡Tu carrito está vacío! Añade algunos productos primero.");
+                return;
+            }
+
+            let texto = "¡Hola! \nHe seleccionado los siguientes productos de tu tienda:\n\n";
+            let total = 0;
+
+            carrito.forEach((p, index) => {
+                texto += `*${index + 1}.* ${p.nombre} - $${p.precio.toLocaleString('es-CO')}\n`;
+                total += p.precio;
+            });
+
+            texto += `\n$ TOTAL A PAGAR: $${total.toLocaleString('es-CO')}\n\n`;
+            texto += `¿Podrías confirmar la disponibilidad y los detalles de pago, por favor?`;
+            
+            const url = `https://wa.me/${TELEFONO_MAMA}?text=${encodeURIComponent(texto)}`;
+            window.open(url, '_blank');
+            vaciarCarrito(); // Opcional: Vaciar el carrito después de enviar el pedido
+        }
+
+        function vaciarCarrito() {
+            localStorage.removeItem(CART_KEY);
+            mostrarCarrito(); // Vuelve a cargar el carrito para que aparezca vacío
+            // Actualizar el contador en la página principal si estuviera abierta
+            if (window.opener && window.opener.updateCartCount) {
+                window.opener.updateCartCount();
+            }
+        }
+
+        window.onload = mostrarCarrito;
+    </script>
+</body>
+</html>
