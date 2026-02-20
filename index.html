@@ -198,7 +198,8 @@
     </div>
 
     <script>
-        const API_URL = "ciarene.up.railway.app";
+        // Busca esta línea en tu index.html y cámbiala así:
+const API_URL = "https://ciarene.up.railway.app/api/productos";
         let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
 
         async function cargarProductos() {
@@ -251,3 +252,4 @@
 </body>
 
 </html>
+
