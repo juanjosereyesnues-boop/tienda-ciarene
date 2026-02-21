@@ -28,7 +28,7 @@ def servir_foto(filename):
 CATALOGO_ROPA = [
     {
         "id": 1,
-        "nombre": "Pijama Dama",
+        "nombre": "Pijama Satin",
         "precio": 50000,
         "precio_viejo": 85000,
         "imagen": "https://ciarene.up.railway.app/fotos/pijama.png", # URL pública
@@ -79,6 +79,7 @@ def get_productos():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
 
 
 
