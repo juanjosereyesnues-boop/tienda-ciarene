@@ -50,8 +50,8 @@ CATALOGO_ROPA = [
     {
         "id": 4,
         "nombre": "Pantalon Tache Bota Ancha",
-        "precio": 30000,
-        "precio_viejo": 48000,
+        "precio": 85000,
+        "precio_viejo": 105000,
         "imagen": "https://ciarene.up.railway.app/fotos/pantalon.png",
         "categoria": "Pantalones"
     }
@@ -68,4 +68,5 @@ def get_productos():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
 
