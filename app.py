@@ -28,32 +28,32 @@ CATALOGO_ROPA = [
         "nombre": "Pijama Dama",
         "precio": 50000,
         "precio_viejo": 85000,
-        "imagen": "ciarene.up.railway.app/fotos/pijama.png",
-        "categoria": "Vestidos"
+        "imagen": "https://ciarene.up.railway.app/fotos/pijama.png", # URL pública
+        "categoria": "Pijamas"
     },
     {
         "id": 2,
         "nombre": "Conjunto Deportivo",
         "precio": 65000,
         "precio_viejo": None,
-        "imagen": "ciarene.up.railway.app/fotos/sudadera.png",
-        "categoria": "Blusas"
+        "imagen": "https://ciarene.up.railway.app/fotos/sudadera.png",
+        "categoria": "Deportivo"
     },
     {
         "id": 3,
         "nombre": "Camisas Tela Fria",
         "precio": 30000,
         "precio_viejo": 48000,
-        "imagen": "ciarene.up.railway.app/fotos/camisetas.png",
-        "categoria": "Chaquetas"
+        "imagen": "https://ciarene.up.railway.app/fotos/camisetas.png",
+        "categoria": "Camisas"
     },
     {
-        "id": 3,
+        "id": 4,
         "nombre": "Pantalon Tache Bota Ancha",
         "precio": 30000,
         "precio_viejo": 48000,
-        "imagen": "ciarene.up.railway.app/fotos/pantalon.png",
-        "categoria": "Chaquetas"
+        "imagen": "https://ciarene.up.railway.app/fotos/pantalon.png",
+        "categoria": "Pantalones"
     }
 ]
 
@@ -68,3 +68,4 @@ def get_productos():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
