@@ -14,6 +14,9 @@ CARPETA_FOTOS = os.path.join(BASE_DIR, 'imagenes')
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
+@app.route('/carrito.html')
+def carrito():
+    return send_from_directory('.', 'carrito.html')
 # -------------------------------------------------------
 
 # Servir imágenes locales de forma profesional
@@ -68,5 +71,6 @@ def get_productos():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
 
 
