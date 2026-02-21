@@ -146,7 +146,6 @@
             color: var(--primary-dark);
         }
 
-        /* Mensaje de carrito vacío */
         .empty-cart-message {
             text-align: center;
             font-size: 1.2rem;
@@ -182,7 +181,7 @@
             <i class="fas fa-trash-alt"></i> Vaciar Carrito
         </button>
         
-        <a href="index.html" class="back-link">
+        <a href="/" class="back-link">
             <i class="fas fa-arrow-left"></i> Seguir comprando
         </a>
     </div>
@@ -196,7 +195,7 @@
             const lista = document.getElementById('lista-carrito');
             let total = 0;
 
-            lista.innerHTML = ''; // Limpiar lista antes de añadir
+            lista.innerHTML = ''; 
             
             if (carrito.length === 0) {
                 lista.innerHTML = `
@@ -206,7 +205,7 @@
                     </div>
                 `;
                 document.getElementById('total-pago').innerText = "$0";
-                document.querySelector('.btn-checkout').disabled = true; // Deshabilita el botón si no hay nada
+                document.querySelector('.btn-checkout').disabled = true; 
                 document.querySelector('.btn-checkout').style.backgroundColor = '#ccc';
                 document.querySelector('.btn-clear-cart').style.display = 'none';
                 return;
@@ -225,17 +224,16 @@
             });
 
             document.getElementById('total-pago').innerText = `$${total.toLocaleString('es-CO')}`;
-            document.querySelector('.btn-checkout').disabled = false; // Habilita el botón
+            document.querySelector('.btn-checkout').disabled = false; 
             document.querySelector('.btn-checkout').style.backgroundColor = 'var(--secondary)';
             document.querySelector('.btn-clear-cart').style.display = 'block';
         }
 
         function eliminarDelCarrito(index) {
             let carrito = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-            carrito.splice(index, 1); // Elimina el elemento en el índice dado
+            carrito.splice(index, 1); 
             localStorage.setItem(CART_KEY, JSON.stringify(carrito));
-            mostrarCarrito(); // Vuelve a renderizar el carrito
-            // Actualizar el contador en la página principal si estuviera abierta
+            mostrarCarrito(); 
             if (window.opener && window.opener.updateCartCount) {
                 window.opener.updateCartCount();
             }
@@ -261,13 +259,12 @@
             
             const url = `https://wa.me/${TELEFONO_MAMA}?text=${encodeURIComponent(texto)}`;
             window.open(url, '_blank');
-            vaciarCarrito(); // Opcional: Vaciar el carrito después de enviar el pedido
+            vaciarCarrito(); 
         }
 
         function vaciarCarrito() {
             localStorage.removeItem(CART_KEY);
-            mostrarCarrito(); // Vuelve a cargar el carrito para que aparezca vacío
-            // Actualizar el contador en la página principal si estuviera abierta
+            mostrarCarrito(); 
             if (window.opener && window.opener.updateCartCount) {
                 window.opener.updateCartCount();
             }
