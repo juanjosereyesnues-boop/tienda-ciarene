@@ -9,38 +9,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         :root { --pink: #ff4d6d; --dark: #2d3436; --bg: #f8f9fa; --gray: #8395a7; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--bg); color: var(--dark); }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--bg); color: var(--dark); overflow-x: hidden; }
         
-        /* 1. HEADER Y MENÚ SUPERIOR DE LUJO */
+        /* 1. HEADER ANIMADO */
         .header-top { 
             background: white; padding: 15px 5%; display: flex; 
             justify-content: space-between; align-items: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000;
         }
-        .logo-box h1 { margin: 0; font-size: 1.8rem; color: var(--pink); font-weight: 700; letter-spacing: -1px; }
+        .logo-box h1 { margin: 0; font-size: 1.8rem; color: var(--pink); font-weight: 700; letter-spacing: -1px; transition: transform 0.3s; }
+        .logo-box h1:hover { transform: scale(1.05); }
         .logo-box p { margin: 0; font-size: 0.75rem; color: var(--gray); }
         
         .header-actions { display: flex; align-items: center; gap: 20px; }
-        .cart-icon { position: relative; font-size: 1.4rem; color: var(--dark); text-decoration: none; }
+        .cart-icon { position: relative; font-size: 1.4rem; color: var(--dark); text-decoration: none; transition: transform 0.3s; display: inline-block; }
+        .cart-icon:hover { transform: scale(1.1) rotate(5deg); color: var(--pink); }
         .badge { 
             position: absolute; top: -5px; right: -8px; background: var(--pink); 
             color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 50%; font-weight: bold;
+            box-shadow: 0 2px 5px rgba(255,77,109,0.5);
         }
-        .logout-btn { color: #c8d6e5; cursor: pointer; transition: 0.3s; font-size: 1.2rem; }
-        .logout-btn:hover { color: var(--pink); }
+        .logout-btn { color: #c8d6e5; cursor: pointer; transition: all 0.3s; font-size: 1.2rem; }
+        .logout-btn:hover { color: var(--pink); transform: translateX(3px); }
 
-        /* 2. BARRA DE CATEGORÍAS DESLIZABLE */
+        /* 2. BARRA DE CATEGORÍAS ANIMADA */
         .categories-bar {
-            background: white; padding: 10px 5%; display: flex; gap: 10px;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
+            padding: 12px 5%; display: flex; gap: 12px;
             overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid #eee;
-            position: sticky; top: 0; z-index: 100;
+            position: sticky; top: 65px; z-index: 99;
         }
         .categories-bar::-webkit-scrollbar { display: none; }
         .cat-btn {
-            padding: 8px 20px; border-radius: 50px; border: 1px solid #eee;
+            padding: 8px 22px; border-radius: 50px; border: 1px solid #eee;
             background: white; color: var(--gray); font-family: 'Poppins'; 
-            font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.3s;
+            font-weight: 600; cursor: pointer; white-space: nowrap; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .cat-btn.active { background: var(--dark); color: white; border-color: var(--dark); }
+        .cat-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 10px rgba(0,0,0,0.05); border-color: var(--pink); color: var(--pink); }
+        .cat-btn.active { background: var(--dark); color: white; border-color: var(--dark); transform: scale(1.05); }
+        .cat-btn:active { transform: scale(0.95); }
 
         /* 3. TARJETAS DE PRODUCTOS PROFESIONALES */
         .grid { 
@@ -49,24 +58,26 @@
         }
         .card { 
             background: white; border-radius: 20px; overflow: hidden; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.04); transition: transform 0.3s, box-shadow 0.3s; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04); transition: all 0.4s ease; 
             display: flex; flex-direction: column; cursor: pointer;
         }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(255,77,109,0.15); }
         
         .img-container { position: relative; height: 320px; overflow: hidden; background: #f0f0f0; }
-        .img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-        .card:hover .img-container img { transform: scale(1.05); }
+        .img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .card:hover .img-container img { transform: scale(1.1); }
         
         .tag-oferta { 
             position: absolute; top: 15px; left: 15px; background: #ff4757; 
             color: white; font-size: 0.7rem; font-weight: bold; padding: 5px 12px; 
-            border-radius: 50px; letter-spacing: 1px;
+            border-radius: 50px; letter-spacing: 1px; z-index: 2;
+            animation: pulse-glow 2s infinite;
         }
 
-        .card-info { padding: 20px; position: relative; }
+        .card-info { padding: 20px; position: relative; background: white; z-index: 2; }
         .cat-label { font-size: 0.7rem; color: var(--gray); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 5px; }
-        .card-info h3 { margin: 0 0 10px; font-size: 1.1rem; color: var(--dark); line-height: 1.3; }
+        .card-info h3 { margin: 0 0 10px; font-size: 1.1rem; color: var(--dark); line-height: 1.3; transition: color 0.3s; }
+        .card:hover .card-info h3 { color: var(--pink); }
         
         .price-box { display: flex; align-items: center; gap: 10px; }
         .price-new { color: var(--pink); font-weight: 700; font-size: 1.3rem; }
@@ -76,32 +87,60 @@
             position: absolute; right: 20px; bottom: 20px; background: var(--dark);
             color: white; width: 40px; height: 40px; border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
-            border: none; cursor: pointer; transition: 0.3s;
+            border: none; cursor: pointer; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-        .card:hover .btn-quick-add { background: var(--pink); transform: rotate(90deg); }
+        .card:hover .btn-quick-add { background: var(--pink); transform: rotate(180deg) scale(1.1); box-shadow: 0 5px 15px rgba(255,77,109,0.4); }
 
-        /* MODAL TEMU STYLE (Sin cambios grandes, solo pulido) */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
-        .modal-content { background: white; margin: 5% auto; width: 90%; max-width: 420px; border-radius: 30px; overflow: hidden; animation: zoomIn 0.3s; }
+        /* 4. MODAL TEMU STYLE ANIMADO */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); }
+        .modal-content { background: white; margin: 5% auto; width: 90%; max-width: 420px; border-radius: 30px; overflow: hidden; animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
         .m-img { width: 100%; height: 350px; object-fit: cover; }
         .m-body { padding: 30px; }
-        .m-title { font-size: 1.5rem; font-weight: 700; margin: 0 0 5px; }
-        .m-price { font-size: 1.6rem; color: var(--pink); font-weight: 700; margin: 10px 0 20px; }
+        .m-title { font-size: 1.5rem; font-weight: 700; margin: 0 0 5px; color: var(--dark); }
+        .m-price { font-size: 1.8rem; color: var(--pink); font-weight: 700; margin: 10px 0 20px; }
         label { font-size: 0.85rem; color: var(--gray); font-weight: 600; display: block; margin-bottom: 8px; }
-        select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e1e1e1; font-family: 'Poppins'; margin-bottom: 20px; background: #fafafa; }
-        .btn-add { width: 100%; padding: 16px; background: var(--pink); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
-        .close { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5); cursor: pointer; z-index: 10; }
+        select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e1e1e1; font-family: 'Poppins'; margin-bottom: 20px; background: #fafafa; transition: border-color 0.3s; cursor: pointer; }
+        select:focus { outline: none; border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255,77,109,0.1); }
+        
+        .btn-add { 
+            width: 100%; padding: 16px; background: var(--pink); color: white; border: none; 
+            border-radius: 50px; font-weight: bold; font-size: 1.1rem; cursor: pointer; 
+            transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .btn-add:hover { background: #e63958; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255,77,109,0.3); }
+        .btn-add:active { transform: translateY(1px); }
+        
+        .close { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5); cursor: pointer; z-index: 10; transition: transform 0.3s; }
+        .close:hover { transform: rotate(90deg) scale(1.2); }
+
+        /* 5. TOAST NOTIFICATION (LA ALERTA BONITA) */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: var(--dark); color: #fff;
+            text-align: center; border-radius: 50px; padding: 16px 24px; position: fixed;
+            z-index: 3000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 1rem; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        #toast.show { visibility: visible; animation: slideUpToast 0.5s, fadeOutToast 0.5s 2.5s forwards; }
+
+        /* KEYFRAMES PERSONALIZADOS */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(255,71,87, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255,71,87, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,71,87, 0); }
+        }
+        @keyframes slideUpToast { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+        @keyframes fadeOutToast { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <header class="header-top">
+    <header class="header-top animate__animated animate__fadeInDown">
         <div class="logo-box">
             <h1>Ciarené</h1>
-            <p id="user-display">Bienvenida</p>
+            <p id="user-display" class="animate__animated animate__fadeIn animate__delay-1s">Bienvenida</p>
         </div>
         <div class="header-actions">
-            <a href="carrito.html" class="cart-icon">
+            <a href="carrito.html" class="cart-icon" id="cart-icon">
                 <i class="fas fa-shopping-bag"></i>
                 <span id="count" class="badge">0</span>
             </a>
@@ -109,7 +148,7 @@
         </div>
     </header>
 
-    <div class="categories-bar" id="cat-container">
+    <div class="categories-bar animate__animated animate__fadeInLeft" id="cat-container">
         <button class="cat-btn active" onclick="filtrar('Todos')">Todo</button>
         <button class="cat-btn" onclick="filtrar('Pijamas')">Pijamas</button>
         <button class="cat-btn" onclick="filtrar('Deportivo')">Deportivo</button>
@@ -128,28 +167,30 @@
             </div>
             <div class="m-body">
                 <h2 id="m-nom" class="m-title"></h2>
-                <p id="m-desc" style="color:var(--gray); font-size:0.9rem; margin-top:0;"></p>
+                <p id="m-desc" style="color:var(--gray); font-size:0.95rem; margin-top:0; line-height: 1.5;"></p>
                 <div id="m-pre" class="m-price"></div>
                 
-                <label>Selecciona tu Talla:</label>
+                <label><i class="fas fa-ruler-combined" style="color:var(--pink)"></i> Selecciona tu Talla:</label>
                 <select id="m-talla"></select>
                 
-                <label>Selecciona el Color:</label>
+                <label><i class="fas fa-palette" style="color:var(--pink)"></i> Selecciona el Color:</label>
                 <select id="m-color"></select>
 
-                <button class="btn-add" onclick="añadir()"><i class="fas fa-cart-plus"></i> Agregar al carrito</button>
+                <button class="btn-add" onclick="añadir()"><i class="fas fa-shopping-cart"></i> Agregar a mi pedido</button>
             </div>
         </div>
     </div>
 
+    <div id="toast"><i class="fas fa-check-circle" style="color: #2ed573; margin-right: 8px;"></i> ¡Añadido al carrito con éxito!</div>
+
     <script>
-        // 1. SEGURIDAD BÁSICA
+        // 1. SEGURIDAD
         const user = localStorage.getItem('usuario_ciarene');
         if(!user) window.location.href = "/";
         document.getElementById('user-display').innerText = `Hola, ${user.split('@')[0]} ✨`;
 
         let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
-        let productosGlobales = []; // Guarda todos los productos para poder filtrar
+        let productosGlobales = []; 
         let pSel = null;
 
         // 2. CARGAR DESDE LA API
@@ -163,23 +204,24 @@
             } catch (e) { console.error("Error al cargar"); }
         }
 
-        // 3. PINTAR LAS TARJETAS (NUEVO DISEÑO)
+        // 3. PINTAR LAS TARJETAS (NUEVO DISEÑO CON ANIMACIONES ESCALONADAS)
         function renderizar(lista) {
             const cont = document.getElementById('productos');
             cont.innerHTML = '';
             
             if(lista.length === 0) {
-                cont.innerHTML = '<p style="text-align:center; width:100%; color:#888;">No hay productos en esta categoría.</p>';
+                cont.innerHTML = '<p class="animate__animated animate__fadeIn" style="text-align:center; width:100%; color:#888;">No hay productos en esta categoría.</p>';
                 return;
             }
 
             lista.forEach((p, i) => {
                 const div = document.createElement('div');
-                div.className = 'card animate__animated animate__fadeInUp';
-                div.style.animationDelay = `${i * 0.1}s`;
+                div.className = 'card animate__animated animate__zoomIn';
+                // Retraso en escalera para que aparezcan uno por uno elegantemente
+                div.style.animationDelay = `${i * 0.15}s`; 
                 div.onclick = () => abrir(p);
                 
-                const tieneOferta = p.precio_viejo ? `<span class="tag-oferta">OFERTA</span>` : '';
+                const tieneOferta = p.precio_viejo ? `<span class="tag-oferta">OFERTA 🔥</span>` : '';
                 const precioViejoHTML = p.precio_viejo ? `<span class="price-old">$${p.precio_viejo.toLocaleString()}</span>` : '';
 
                 div.innerHTML = `
@@ -188,7 +230,7 @@
                         <img src="${p.imagen}">
                     </div>
                     <div class="card-info">
-                        <span class="cat-label">${p.categoria || 'Colección'}</span>
+                        <span class="cat-label">${p.categoria || 'Colección Exclusiva'}</span>
                         <h3>${p.nombre}</h3>
                         <div class="price-box">
                             <span class="price-new">$${p.precio.toLocaleString()}</span>
@@ -203,11 +245,9 @@
 
         // 4. LÓGICA DEL MENÚ DE CATEGORÍAS
         function filtrar(categoria) {
-            // Pintar botones
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
-            // Filtrar productos
             if(categoria === 'Todos') {
                 renderizar(productosGlobales);
             } else {
@@ -216,7 +256,7 @@
             }
         }
 
-        // 5. FUNCIONES DEL MODAL Y CARRITO
+        // 5. FUNCIONES DEL MODAL
         function abrir(p) {
             pSel = p;
             document.getElementById('m-img').src = p.imagen;
@@ -225,8 +265,11 @@
             document.getElementById('m-pre').innerText = `$${p.precio.toLocaleString()}`;
             document.getElementById('m-talla').innerHTML = p.tallas.map(t=>`<option>${t}</option>`).join('');
             document.getElementById('m-color').innerHTML = p.colores.map(c=>`<option>${c}</option>`).join('');
-            document.getElementById('modal-producto').style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Bloquea el fondo
+            
+            const modal = document.getElementById('modal-producto');
+            modal.style.display = 'block';
+            modal.querySelector('.modal-content').classList.add('animate__zoomIn'); // Reinicia animación
+            document.body.style.overflow = 'hidden'; 
         }
 
         function cerrar() { 
@@ -234,21 +277,33 @@
             document.body.style.overflow = 'auto';
         }
 
+        // 6. AÑADIR AL CARRITO Y ANIMACIONES DE ÉXITO
         function añadir() {
             const t = document.getElementById('m-talla').value;
             const c = document.getElementById('m-color').value;
             carrito.push({ nombre: `${pSel.nombre} (Talla: ${t}, Color: ${c})`, precio: pSel.precio });
             localStorage.setItem('carrito_ciarene', JSON.stringify(carrito));
+            
             actualizar();
             cerrar();
-            
-            // Efecto de rebote en el carrito
-            const count = document.getElementById('count');
-            count.classList.add('animate__animated', 'animate__rubberBand');
-            setTimeout(() => count.classList.remove('animate__rubberBand'), 1000);
+            mostrarToast();
+            animarIconoCarrito();
         }
 
         function actualizar() { document.getElementById('count').innerText = carrito.length; }
+
+        function animarIconoCarrito() {
+            const icon = document.getElementById('cart-icon');
+            icon.classList.remove('animate__animated', 'animate__rubberBand');
+            void icon.offsetWidth; // Truco de programación para reiniciar animación CSS
+            icon.classList.add('animate__animated', 'animate__rubberBand');
+        }
+
+        function mostrarToast() {
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
         
         function logout() {
             if(confirm("¿Seguro que quieres cerrar sesión?")) {
