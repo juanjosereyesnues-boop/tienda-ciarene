@@ -3,48 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ciarené Boutique</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap" rel="stylesheet">
+    <title>Ciarené Boutique | Oficial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --p: #ff4d6d; --d: #1a1a1a; }
-        body { font-family: 'Outfit', sans-serif; margin: 0; background: #fff5f7; }
-        header { background: white; padding: 20px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 40px 8%; }
-        .card { background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); text-align: center; }
-        .card img { width: 100%; height: 350px; object-fit: cover; }
-        .info { padding: 20px; }
-        .btn { background: var(--d); color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        :root { --p: #ff4d6d; --d: #1a1a1a; --bg: #fff5f7; }
+        body { font-family: 'Outfit', sans-serif; margin: 0; background: var(--bg); overflow-x: hidden; }
+        
+        header { 
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px);
+            padding: 15px 8%; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .logo { font-size: 2.2rem; font-weight: 900; letter-spacing: -2px; color: var(--d); }
+        .logo span { color: var(--p); }
+        
+        .cart-btn { 
+            background: var(--d); color: white; padding: 12px 25px; border-radius: 50px; 
+            text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 10px; transition: 0.3s;
+        }
+        .cart-btn:hover { background: var(--p); transform: scale(1.05); }
+
+        .hero { text-align: center; padding: 60px 5%; animation: fadeIn 1.5s; }
+        .hero h2 { font-size: 3.5rem; margin: 0; font-weight: 900; line-height: 1; color: var(--d); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 35px; padding: 40px 8%; }
+        .card { 
+            background: white; border-radius: 35px; overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.03); transition: 0.5s; position: relative;
+        }
+        .card:hover { transform: translateY(-15px); box-shadow: 0 30px 60px rgba(255, 77, 109, 0.2); }
+        
+        .tag { position: absolute; top: 20px; left: 20px; background: var(--p); color: white; padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; }
+        
+        .card img { width: 100%; height: 400px; object-fit: cover; transition: 0.5s; }
+        .card:hover img { transform: scale(1.05); }
+        
+        .info { padding: 25px; text-align: center; }
+        .info h3 { margin: 0; font-size: 1.5rem; color: var(--d); }
+        .price { font-size: 1.8rem; font-weight: 900; color: var(--p); display: block; margin: 10px 0; }
+        
+        .btn-add { 
+            background: var(--d); color: white; border: none; padding: 15px; width: 100%; 
+            border-radius: 18px; font-weight: 900; cursor: pointer; transition: 0.3s;
+        }
+        .btn-add:hover { background: var(--p); }
     </style>
 </head>
 <body>
-    <header>
-        <h1 style="color:var(--p); margin:0">CIARENÉ</h1>
-        <a href="/carrito" style="text-decoration:none; font-size:1.5rem;">🛒 <span id="count">0</span></a>
+    <header class="animate__animated animate__fadeInDown">
+        <div class="logo">CIARE<span>NÉ</span></div>
+        <a href="/carrito" class="cart-btn">🛒 <span id="count">0</span></a>
     </header>
+
+    <div class="hero">
+        <p style="color:var(--p); font-weight:bold; letter-spacing:3px;">NUEVA COLECCIÓN</p>
+        <h2>Moda que Resalta <br> Tu Estilo</h2>
+    </div>
+
     <div class="grid" id="lista"></div>
+
     <script>
         let prods = [];
         let cart = JSON.parse(localStorage.getItem('cart_ciarene')) || [];
-        async function load() {
+
+        async function init() {
             const res = await fetch('/api/productos');
             prods = await res.json();
-            document.getElementById('lista').innerHTML = prods.map(p => `
-                <div class="card">
-                    <img src="${p.imagen}" onerror="this.src='https://via.placeholder.com/300'">
+            document.getElementById('lista').innerHTML = prods.map((p, i) => `
+                <div class="card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s">
+                    <div class="tag">${p.tag}</div>
+                    <img src="${p.imagen}" onerror="this.src='https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500'">
                     <div class="info">
                         <h3>${p.nombre}</h3>
-                        <p style="color:var(--p); font-weight:900">$${p.precio.toLocaleString()}</p>
-                        <button class="btn" onclick="add(${p.id})">Agregar</button>
+                        <span class="price">$${p.precio.toLocaleString()}</span>
+                        <button class="btn-add" onclick="add(${p.id})">Añadir a la Bolsa</button>
                     </div>
                 </div>`).join('');
             document.getElementById('count').innerText = cart.length;
         }
+
         function add(id) {
             cart.push(prods.find(x => x.id === id));
             localStorage.setItem('cart_ciarene', JSON.stringify(cart));
             document.getElementById('count').innerText = cart.length;
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 }, colors: ['#ff4d6d', '#1a1a1a'] });
         }
-        load();
+        init();
     </script>
 </body>
 </html>
