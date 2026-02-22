@@ -1,67 +1,176 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Tu Bolsa | Ciarené</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciarené | Checkout Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body { font-family: 'Outfit'; background: #fff5f7; padding: 40px 5%; display: flex; justify-content: center; }
-        .cart-card { 
-            background: white; width: 100%; max-width: 500px; padding: 40px; 
-            border-radius: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.1); 
-        }
-        .item { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 20px 0; border-bottom: 1px solid #f0f0f0; 
-        }
-        .btn-wa { 
-            background: #1a1a1a; color: white; border: none; padding: 22px; 
-            width: 100%; border-radius: 20px; font-weight: 900; font-size: 1.2rem;
-            cursor: pointer; transition: 0.3s; margin-top: 30px;
-        }
-        .btn-wa:hover { background: #25D366; transform: scale(1.02); }
-        .remove { color: #ff4d6d; cursor: pointer; font-size: 0.8rem; font-weight: 900; border: none; background: none; }
+        :root { --p: #ff4d6d; --d: #1a1a1a; --soft: #f8f9fa; }
+        body { font-family: 'Outfit', sans-serif; background: #fff5f7; margin: 0; padding: 20px; color: var(--d); }
+
+        .container { max-width: 600px; margin: 40px auto; background: white; border-radius: 40px; padding: 30px; box-shadow: 0 40px 100px rgba(0,0,0,0.1); position: relative; overflow: hidden; }
+        
+        h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 10px; letter-spacing: -2px; }
+        .subtitle { color: #888; margin-bottom: 30px; }
+
+        /* Lista de Productos */
+        .cart-item { display: flex; align-items: center; gap: 20px; padding: 15px 0; border-bottom: 1px solid #eee; transition: 0.3s; }
+        .cart-item img { width: 80px; height: 80px; border-radius: 20px; object-fit: cover; }
+        .item-info { flex: 1; }
+        .item-info h3 { margin: 0; font-size: 1.1rem; }
+        .item-price { color: var(--p); font-weight: 900; font-size: 1.2rem; }
+
+        /* Controles de Cantidad */
+        .qty-controls { display: flex; align-items: center; gap: 15px; background: var(--soft); padding: 5px 15px; border-radius: 50px; }
+        .qty-btn { border: none; background: none; font-size: 1.2rem; cursor: pointer; font-weight: 900; color: var(--d); }
+        
+        /* Formulario Pro */
+        .form-section { margin-top: 40px; padding: 20px; background: var(--soft); border-radius: 30px; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 15px; box-sizing: border-box; font-family: 'Outfit'; }
+
+        /* Resumen de Pago */
+        .summary { margin-top: 30px; border-top: 2px dashed #eee; padding-top: 20px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.1rem; }
+        .total-row { font-size: 2rem; font-weight: 900; color: var(--p); }
+
+        /* Botones */
+        .btn-main { background: var(--d); color: white; border: none; padding: 20px; width: 100%; border-radius: 20px; font-weight: 900; font-size: 1.2rem; cursor: pointer; transition: 0.4s; margin-top: 20px; }
+        .btn-main:hover { background: #25D366; transform: scale(1.02); box-shadow: 0 15px 30px rgba(37, 211, 102, 0.3); }
+        .clear-btn { background: none; border: none; color: #ff4d6d; cursor: pointer; font-weight: 600; margin-top: 10px; }
+
+        /* Empty State */
+        .empty { text-align: center; padding: 60px 20px; }
+        .empty-icon { font-size: 4rem; margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <div class="cart-card animate__animated animate__fadeInUp">
-        <h1 style="font-size:3rem; letter-spacing:-2px; margin-bottom:10px;">Tu Bolsa ✨</h1>
-        <p style="color:#888; margin-bottom:30px;">Revisa tus productos antes de finalizar.</p>
-        
-        <div id="lista"></div>
-        
-        <div style="margin-top:30px; display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:1.2rem; font-weight:500;">Subtotal</span>
-            <span id="total" style="font-size:2rem; font-weight:900; color:#ff4d6d;"></span>
+
+    <div class="container animate__animated animate__fadeInUp">
+        <div id="cart-content">
+            <h1>Tu Bolsa 🌸</h1>
+            <p class="subtitle">Revisa tu pedido antes de enviarlo por WhatsApp</p>
+            
+            <div id="cart-items-list"></div>
+
+            <div class="summary">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">$0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Envío</span>
+                    <span style="color: #25D366; font-weight: 600;">¡GRATIS!</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>Total</span>
+                    <span id="total">$0</span>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 style="margin-top:0">Tus Datos para el Envío 🚚</h3>
+                <input type="text" id="nombre-cliente" placeholder="¿Cómo es tu nombre?">
+                <input type="text" id="ciudad-cliente" placeholder="¿En qué ciudad estás?">
+            </div>
+
+            <button class="btn-main" onclick="procesarPedido()">FINALIZAR POR WHATSAPP</button>
+            <button class="clear-btn" onclick="vaciarCarrito()">Vaciar bolsa</button>
+            <a href="/" style="display:block; text-align:center; margin-top:20px; color:#aaa; text-decoration:none;">← Seguir comprando</a>
         </div>
-        
-        <button class="btn-wa" onclick="pedir()">PEDIR POR WHATSAPP</button>
-        <a href="/" style="display:block; text-align:center; margin-top:20px; color:#aaa; text-decoration:none;">Seguir comprando</a>
     </div>
 
     <script>
         let cart = JSON.parse(localStorage.getItem('cart_ciarene')) || [];
+
         function render() {
-            let t = 0;
-            document.getElementById('lista').innerHTML = cart.length > 0 ? cart.map((p, i) => {
-                t += p.precio;
-                return `<div class="item animate__animated animate__fadeInLeft" style="animation-delay:${i*0.1}s">
-                    <div>
-                        <strong style="font-size:1.1rem">${p.nombre}</strong><br>
-                        <span style="color:#ff4d6d; font-weight:900">$${p.precio.toLocaleString()}</span>
+            const listDiv = document.getElementById('cart-items-list');
+            const content = document.getElementById('cart-content');
+
+            if (cart.length === 0) {
+                content.innerHTML = `
+                    <div class="empty animate__animated animate__fadeIn">
+                        <div class="empty-icon">🛍️</div>
+                        <h2>Tu bolsa está vacía</h2>
+                        <p>¡Seguro que encuentras algo que te encante!</p>
+                        <a href="/" class="btn-main" style="text-decoration:none; display:inline-block">Ir a la tienda</a>
+                    </div>`;
+                return;
+            }
+
+            let total = 0;
+            listDiv.innerHTML = cart.map((p, i) => {
+                const sub = p.precio * (p.cantidad || 1);
+                total += sub;
+                return `
+                <div class="cart-item animate__animated animate__fadeInLeft" style="animation-delay: ${i*0.1}s">
+                    <img src="${p.imagen}">
+                    <div class="item-info">
+                        <h3>${p.nombre}</h3>
+                        <div class="item-price">$${p.precio.toLocaleString()}</div>
                     </div>
-                    <button class="remove" onclick="del(${i})">QUITAR</button>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateQty(${i}, -1)">-</button>
+                        <span style="font-weight:900">${p.cantidad || 1}</span>
+                        <button class="qty-btn" onclick="updateQty(${i}, 1)">+</button>
+                    </div>
                 </div>`;
-            }).join('') : "<p style='text-align:center; padding:40px;'>Tu bolsa está vacía 🗑️</p>";
-            document.getElementById('total').innerText = "$" + t.toLocaleString();
+            }).join('');
+
+            document.getElementById('subtotal').innerText = "$" + total.toLocaleString();
+            document.getElementById('total').innerText = "$" + total.toLocaleString();
         }
-        function del(i) { cart.splice(i,1); localStorage.setItem('cart_ciarene', JSON.stringify(cart)); render(); }
-        function pedir() {
-            if(cart.length === 0) return alert("¡Añade algo primero!");
-            const msg = encodeURIComponent("¡Hola Ciarené! 🌸 Quiero realizar este pedido:\n\n" + cart.map(p => "✅ " + p.nombre + " ($" + p.precio.toLocaleString() + ")").join("\n") + "\n\n💰 TOTAL: " + document.getElementById('total').innerText);
-            window.location.href = "https://wa.me/573000000000?text=" + msg;
+
+        function updateQty(index, delta) {
+            if (!cart[index].cantidad) cart[index].cantidad = 1;
+            cart[index].cantidad += delta;
+            if (cart[index].cantidad < 1) {
+                cart.splice(index, 1);
+            }
+            save();
         }
+
+        function vaciarCarrito() {
+            if(confirm("¿Seguro que quieres vaciar tu bolsa?")) {
+                cart = [];
+                save();
+            }
+        }
+
+        function save() {
+            localStorage.setItem('cart_ciarene', JSON.stringify(cart));
+            render();
+        }
+
+        function procesarPedido() {
+            const nombre = document.getElementById('nombre-cliente').value;
+            const ciudad = document.getElementById('ciudad-cliente').value;
+
+            if (!nombre || !ciudad) {
+                alert("Por favor, llena tu nombre y ciudad para el envío 🌸");
+                return;
+            }
+
+            let total = 0;
+            const itemsMsg = cart.map(p => {
+                const sub = p.precio * (p.cantidad || 1);
+                total += sub;
+                return `• ${p.nombre} x${p.cantidad || 1} ($${sub.toLocaleString()})`;
+            }).join("\n");
+
+            const finalMsg = encodeURIComponent(
+                `¡Hola Ciarené! 🌸 Quiero hacer un pedido:\n\n` +
+                `👤 *Cliente:* ${nombre}\n` +
+                `📍 *Ciudad:* ${ciudad}\n\n` +
+                `🛍️ *Productos:*\n${itemsMsg}\n\n` +
+                `💰 *TOTAL:* $${total.toLocaleString()}\n\n` +
+                `¿Me confirman disponibilidad? Gracias! ✨`
+            );
+
+            window.location.href = "https://wa.me/573000000000?text=" + finalMsg;
+        }
+
         render();
     </script>
 </body>
