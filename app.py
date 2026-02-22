@@ -2,12 +2,15 @@ from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 
+# Agregamos static_folder='.' para que Flask sepa buscar el HTML en la raíz
 app = Flask(__name__, static_folder='.')
 CORS(app)
 
+# Configuración de carpetas
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARPETA_FOTOS = os.path.join(BASE_DIR, 'imagenes')
 
+# --- ESTO ES LO QUE SOLUCIONA EL ERROR 404 EN RAILWAY ---
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
@@ -15,12 +18,14 @@ def index():
 @app.route('/carrito.html')
 def carrito():
     return send_from_directory('.', 'carrito.html')
+# -------------------------------------------------------
 
+# Servir imágenes locales de forma profesional
 @app.route('/fotos/<path:filename>')
 def servir_foto(filename):
     return send_from_directory(CARPETA_FOTOS, filename)
 
-# Catálogo actualizado con Tallas y Colores
+# Catálogo actualizado con Tallas y Colores para el Modal tipo Temu
 CATALOGO_ROPA = [
     {
         "id": 1,
@@ -83,5 +88,6 @@ def get_productos():
     })
 
 if __name__ == '__main__':
+    # Railway usa la variable de entorno PORT
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
