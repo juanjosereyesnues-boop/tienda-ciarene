@@ -1,37 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Bienvenida - Ciarené</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenida a Ciarené</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body { font-family: 'Poppins'; background: #fdfcfb; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 300px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 50px; border: 1px solid #ddd; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #ff4d6d; color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
-        a { color: #ff4d6d; text-decoration: none; font-size: 0.8rem; cursor: pointer; }
+        :root { --primary: #ff4d6d; --dark: #2d3436; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0;
+        }
+        .login-card {
+            background: white; padding: 40px; border-radius: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            width: 100%; max-width: 380px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .logo { color: var(--primary); font-size: 2.5rem; font-weight: 700; margin-bottom: 5px; letter-spacing: -1px; }
+        h2 { font-size: 1.1rem; color: #777; margin-bottom: 30px; font-weight: 300; }
+        .input-group { margin-bottom: 15px; position: relative; }
+        input {
+            width: 100%; padding: 15px 20px; border-radius: 50px; 
+            border: 1.5px solid #eee; background: #fdfdfd; 
+            box-sizing: border-box; font-family: 'Poppins'; transition: 0.3s;
+        }
+        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(255,77,109,0.1); }
+        .btn-login {
+            background: var(--primary); color: white; border: none;
+            width: 100%; padding: 16px; border-radius: 50px;
+            font-size: 1.1rem; font-weight: 600; cursor: pointer;
+            margin-top: 15px; transition: 0.4s;
+        }
+        .btn-login:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(255,77,109,0.4); }
+        .switch { margin-top: 25px; font-size: 0.9rem; color: #888; }
+        .switch a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1 style="color:#ff4d6d">Ciarené</h1>
-        <h3 id="titulo">Iniciar Sesión</h3>
-        <input type="email" id="email" placeholder="Correo electrónico">
-        <input type="password" id="pass" placeholder="Contraseña">
-        <button onclick="enviar()">Entrar</button>
-        <p><a onclick="cambiar()" id="link">¿No tienes cuenta? Regístrate</a></p>
+    <div class="login-card animate__animated animate__fadeInUp">
+        <div class="logo">Ciarené</div>
+        <h2 id="titulo">Moda que te hace brillar ✨</h2>
+        
+        <div class="input-group">
+            <input type="email" id="email" placeholder="Correo electrónico">
+        </div>
+        <div class="input-group">
+            <input type="password" id="pass" placeholder="Contraseña">
+        </div>
+        
+        <button class="btn-login" onclick="enviar()">Entrar a la tienda</button>
+
+        <div class="switch">
+            <span id="texto-cambio">¿Eres nueva en la familia?</span> <br>
+            <a onclick="cambiar()" id="link">Crear mi cuenta VIP</a>
+        </div>
     </div>
 
     <script>
         let esRegistro = false;
         function cambiar() {
             esRegistro = !esRegistro;
-            document.getElementById('titulo').innerText = esRegistro ? "Crear Cuenta" : "Iniciar Sesión";
-            document.getElementById('link').innerText = esRegistro ? "¿Ya tienes cuenta? Entra" : "¿No tienes cuenta? Regístrate";
+            document.getElementById('titulo').innerText = esRegistro ? "Crea tu cuenta exclusiva 🌸" : "Moda que te hace brillar ✨";
+            document.getElementById('link').innerText = esRegistro ? "Ya soy parte de la familia" : "Crear mi cuenta VIP";
+            document.getElementById('texto-cambio').innerText = esRegistro ? "¿Ya tienes cuenta?" : "¿Eres nueva en la familia?";
         }
         async function enviar() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('pass').value;
+            if(!email || !password) return alert("Por favor, llena todos los campos");
+            
             const res = await fetch('/api/auth', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
