@@ -314,10 +314,12 @@
 </div>
 
     <script>
+    // Configuración inicial
     const API_URL = "https://ciarene.up.railway.app/api/productos";
     let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
-    let productoSeleccionado = null; // Para el modal
+    let productoSeleccionado = null; 
 
+    // 1. CARGAR PRODUCTOS (Tu lógica original con mejora para el modal)
     async function cargarProductos() {
         try {
             const res = await fetch(API_URL);
@@ -327,7 +329,7 @@
 
             json.data.forEach((p, i) => {
                 const tieneOferta = p.precio_viejo != null;
-                // Convertimos el objeto a texto para el modal
+                // Preparamos el objeto para el modal sin romper el HTML
                 const pString = JSON.stringify(p).replace(/"/g, '&quot;');
                 
                 container.innerHTML += `
@@ -349,63 +351,93 @@
             });
             actualizarContador();
         } catch (e) {
+            console.error(e);
             document.getElementById('productos').innerHTML = "Se A Producio Un Error, Estamos En Ello";
         }
     }
 
-    // --- NUEVAS FUNCIONES PARA EL MODAL ---
+    // 2. FUNCIONES DEL MODAL (Lo nuevo para ver detalles)
     function abrirModal(p) {
         productoSeleccionado = p;
+        
+        // Ponemos los datos básicos
         document.getElementById('modal-imagen').src = p.imagen;
         document.getElementById('modal-nombre').innerText = p.nombre;
         document.getElementById('modal-precio').innerText = `$${p.precio.toLocaleString()}`;
-        document.getElementById('modal-producto').style.display = "block";
-        document.body.style.overflow = "hidden";
+        
+        // Llenamos las TALLAS dinámicamente desde el Python
+        const selectTalla = document.getElementById('modal-talla');
+        if (selectTalla) {
+            selectTalla.innerHTML = ''; 
+            if (p.tallas && p.tallas.length > 0) {
+                p.tallas.forEach(t => {
+                    selectTalla.innerHTML += `<option value="${t}">${t}</option>`;
+                });
+            } else {
+                selectTalla.innerHTML = `<option value="Única">Talla Única</option>`;
+            }
+        }
+
+        // Mostramos el modal
+        const modal = document.getElementById('modal-producto');
+        if (modal) {
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden"; // Quita el scroll de fondo
+        }
     }
 
     function cerrarModal() {
         document.getElementById('modal-producto').style.display = "none";
-        document.body.style.overflow = "auto";
+        document.body.style.overflow = "auto"; // Devuelve el scroll
     }
 
     function añadirDesdeModal() {
+        if (!productoSeleccionado) return;
+        
         const talla = document.getElementById('modal-talla').value;
-        // Llamamos a tu función agregar original pero sumando la talla
+        // Llamamos a tu función agregar original con el detalle de la talla
         agregar(`${productoSeleccionado.nombre} (Talla: ${talla})`, productoSeleccionado.precio);
+        
         cerrarModal();
     }
 
-    // Cerramos el modal si hacen clic fuera
+    // Cerrar si hacen clic fuera de la caja
     window.onclick = function(event) {
-        if (event.target == document.getElementById('modal-producto')) {
+        const modal = document.getElementById('modal-producto');
+        if (event.target == modal) {
             cerrarModal();
         }
     }
 
-    // --- TUS FUNCIONES ORIGINALES (SIN DAÑAR NADA) ---
+    // 3. TUS FUNCIONES ORIGINALES (Intactas)
     function agregar(n, p) {
         carrito.push({ nombre: n, precio: p });
         localStorage.setItem('carrito_ciarene', JSON.stringify(carrito));
         actualizarContador();
         
-        // Verificamos si el evento existe (por si viene del botón de la card)
-        if(window.event && window.event.target && window.event.target.classList.contains('btn-add')) {
-            const btn = window.event.target;
+        // Animación si el clic vino de un botón con clase btn-add
+        if (window.event && window.event.target && window.event.target.closest('.btn-add')) {
+            const btn = window.event.target.closest('.btn-add');
+            const textoOriginal = btn.innerHTML;
             btn.innerHTML = "¡Añadido!";
-            setTimeout(() => { btn.innerHTML = '<i class="fas fa-plus"></i> Añadir'; }, 1000);
+            setTimeout(() => { btn.innerHTML = textoOriginal; }, 1000);
         }
     }
 
     function actualizarContador() {
         const countEl = document.getElementById('cart-count');
-        if(countEl) countEl.innerText = carrito.length;
+        if (countEl) {
+            countEl.innerText = carrito.length;
+        }
     }
 
+    // Iniciar
     window.onload = cargarProductos;
 </script>
 </body>
 
 </html>
+
 
 
 
