@@ -1,356 +1,101 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ciarené - Moda Femenina</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Ciarené - Tienda</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        :root {
-            --primary: #ff4d6d;
-            --primary-dark: #cc3d57;
-            --dark: #2d3436;
-            --light: #f9f9f9;
-            --white: #ffffff;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--light);
-            margin: 0;
-            color: var(--dark);
-        }
-
-        /* Header Elegante */
-        .header {
-            background: var(--white);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .cart-icon {
-            position: relative;
-            font-size: 1.5rem;
-            color: var(--dark);
-            text-decoration: none;
-        }
-
-        #cart-count {
-            position: absolute;
-            top: -8px;
-            right: -10px;
-            background: var(--primary);
-            color: white;
-            font-size: 0.7rem;
-            padding: 2px 6px;
-            border-radius: 50%;
-            font-weight: bold;
-        }
-
-        /* Grid de Productos */
-        .container {
-            padding: 30px 5%;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .card {
-            background: var(--white);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-
-        .card img {
-            width: 100%;
-            height: 380px;
-            object-fit: cover;
-        }
-
-        .badge-oferta {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: #ff0000;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            z-index: 10;
-        }
-
-        .card-info {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .card-info h3 {
-            margin: 0 0 10px;
-            font-size: 1.1rem;
-        }
-
-        .precio-actual {
-            color: var(--primary);
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .precio-viejo {
-            text-decoration: line-through;
-            color: #aaa;
-            font-size: 0.9rem;
-            margin-right: 8px;
-        }
-
-        /* MODAL ESTILO TEMU */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px);
-        }
-
-        .modal-content {
-            background: white;
-            margin: 2% auto;
-            width: 90%;
-            max-width: 480px;
-            border-radius: 25px;
-            overflow: hidden;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .close-modal {
-            position: absolute;
-            right: 20px;
-            top: 15px;
-            font-size: 28px;
-            color: white;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-            cursor: pointer;
-            z-index: 100;
-        }
-
-        .modal-image {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-        }
-
-        .modal-body {
-            padding: 25px;
-        }
-
-        .modal-body h2 {
-            margin-top: 0;
-            color: var(--dark);
-        }
-
-        .modal-price {
-            font-size: 1.8rem;
-            color: var(--primary);
-            font-weight: 700;
-            margin: 10px 0;
-        }
-
-        .description {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-
-        .custom-select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-            font-family: 'Poppins';
-            background: #f8f8f8;
-        }
-
-        .btn-buy {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 16px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-buy:hover {
-            background: var(--primary-dark);
-            transform: scale(1.02);
-        }
+        :root { --pink: #ff4d6d; --dark: #2d3436; }
+        body { font-family: 'Poppins'; margin: 0; background: #f9f9f9; }
+        .header { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px; }
+        .card { background: white; border-radius: 20px; overflow: hidden; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; height: 300px; object-fit: cover; }
+        .card-info { padding: 15px; text-align: center; }
+        
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+        .modal-content { background: white; margin: 5% auto; width: 90%; max-width: 400px; border-radius: 25px; overflow: hidden; position: relative; }
+        .modal-body { padding: 20px; }
+        select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 10px; }
+        .btn-buy { width: 100%; padding: 15px; background: var(--pink); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <header class="header">
-        <a href="#" class="logo">Ciarené <span style="color:var(--dark)">Shop</span></a>
-        <a href="/carrito.html" class="cart-icon">
-            <i class="fas fa-shopping-bag"></i>
-            <span id="cart-count">0</span>
-        </a>
-    </header>
-
-    <div class="container" id="productos">
+    <div class="header">
+        <h2 style="color:var(--pink)">Ciarené</h2>
+        <div>
+            <span id="user-display" style="margin-right:15px; font-size: 0.8rem;"></span>
+            <a href="carrito.html" style="color:var(--dark); text-decoration:none"><i class="fas fa-shopping-bag"></i> <span id="count">0</span></a>
         </div>
+    </div>
+
+    <div class="grid" id="productos"></div>
 
     <div id="modal-producto" class="modal">
-        <div class="modal-content animate__animated animate__fadeInUp">
-            <span class="close-modal" onclick="cerrarModal()">&times;</span>
-            <img id="modal-imagen" class="modal-image" src="" alt="Producto">
+        <div class="modal-content">
+            <img id="m-img" style="width:100%; height:250px; object-fit:cover">
             <div class="modal-body">
-                <h2 id="modal-nombre"></h2>
-                <p id="modal-descripcion" class="description"></p>
-                <div id="modal-precio" class="modal-price"></div>
-
-                <label><i class="fas fa-ruler"></i> Selecciona tu Talla:</label>
-                <select id="modal-talla" class="custom-select"></select>
-
-                <label><i class="fas fa-palette"></i> Selecciona el Color:</label>
-                <select id="modal-color" class="custom-select"></select>
-
-                <button class="btn-buy" onclick="añadirDesdeModal()">
-                    <i class="fas fa-cart-plus"></i> Añadir al carrito
-                </button>
+                <h2 id="m-nom" style="margin:0"></h2>
+                <p id="m-desc" style="color:#666; font-size:0.9rem"></p>
+                <h3 id="m-pre" style="color:var(--pink)"></h3>
+                <label>Talla:</label> <select id="m-talla"></select>
+                <label>Color:</label> <select id="m-color"></select>
+                <button class="btn-buy" onclick="añadir()">Añadir al Carrito</button>
+                <button onclick="cerrar()" style="background:none; border:none; width:100%; margin-top:10px; color:#aaa; cursor:pointer">Cerrar</button>
             </div>
         </div>
     </div>
 
     <script>
-        const API_URL = "https://ciarene.up.railway.app/api/productos";
+        // SEGURIDAD
+        const user = localStorage.getItem('usuario_ciarene');
+        if(!user) window.location.href = "/";
+        document.getElementById('user-display').innerText = `Hola, ${user.split('@')[0]}`;
+
         let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
-        let productoSeleccionado = null;
+        let pSel = null;
 
-        async function cargarProductos() {
-            try {
-                const res = await fetch(API_URL);
-                const json = await res.json();
-                const container = document.getElementById('productos');
-                container.innerHTML = '';
-
-                json.data.forEach((p, i) => {
-                    const tieneOferta = p.precio_viejo != null;
-                    const pString = JSON.stringify(p).replace(/"/g, '&quot;');
-                    
-                    container.innerHTML += `
-                        <div class="card animate__animated fadeInUp" style="animation-delay: ${i*0.1}s" onclick="abrirModal(${pString})">
-                            ${tieneOferta ? '<div class="badge-oferta">OFERTA 🔥</div>' : ''}
-                            <img src="${p.imagen}" onerror="this.src='https://via.placeholder.com/400x500?text=Ciarené'">
-                            <div class="card-info">
-                                <h3>${p.nombre}</h3>
-                                <div>
-                                    ${tieneOferta ? `<span class="precio-viejo">$${p.precio_viejo.toLocaleString()}</span>` : ''}
-                                    <span class="precio-actual">$${p.precio.toLocaleString()}</span>
-                                </div>
-                            </div>
-                        </div>`;
-                });
-                actualizarContador();
-            } catch (e) {
-                console.error(e);
-                document.getElementById('productos').innerHTML = "<p>Error al conectar con la tienda.</p>";
-            }
+        async function cargar() {
+            const res = await fetch('/api/productos');
+            const json = await res.json();
+            const cont = document.getElementById('productos');
+            json.data.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.onclick = () => abrir(p);
+                div.innerHTML = `<img src="${p.imagen}"><div class="card-info"><h3>${p.nombre}</h3><b style="color:var(--pink)">$${p.precio.toLocaleString()}</b></div>`;
+                cont.appendChild(div);
+            });
+            actualizar();
         }
 
-        function abrirModal(p) {
-            productoSeleccionado = p;
-            document.getElementById('modal-imagen').src = p.imagen;
-            document.getElementById('modal-nombre').innerText = p.nombre;
-            document.getElementById('modal-descripcion').innerText = p.descripcion || "Prenda de alta calidad exclusiva de Ciarené.";
-            document.getElementById('modal-precio').innerText = `$${p.precio.toLocaleString()}`;
-            
-            // Llenar selects
-            document.getElementById('modal-talla').innerHTML = p.tallas.map(t => `<option value="${t}">${t}</option>`).join('');
-            document.getElementById('modal-color').innerHTML = p.colores.map(c => `<option value="${c}">${c}</option>`).join('');
-
-            document.getElementById('modal-producto').style.display = "block";
-            document.body.style.overflow = "hidden";
+        function abrir(p) {
+            pSel = p;
+            document.getElementById('m-img').src = p.imagen;
+            document.getElementById('m-nom').innerText = p.nombre;
+            document.getElementById('m-desc').innerText = p.descripcion;
+            document.getElementById('m-pre').innerText = `$${p.precio.toLocaleString()}`;
+            document.getElementById('m-talla').innerHTML = p.tallas.map(t=>`<option>${t}</option>`).join('');
+            document.getElementById('m-color').innerHTML = p.colores.map(c=>`<option>${c}</option>`).join('');
+            document.getElementById('modal-producto').style.display = 'block';
         }
 
-        function cerrarModal() {
-            document.getElementById('modal-producto').style.display = "none";
-            document.body.style.overflow = "auto";
-        }
+        function cerrar() { document.getElementById('modal-producto').style.display = 'none'; }
 
-        function añadirDesdeModal() {
-            const talla = document.getElementById('modal-talla').value;
-            const color = document.getElementById('modal-color').value;
-            const item = {
-                nombre: `${productoSeleccionado.nombre} (Talla: ${talla}, Color: ${color})`,
-                precio: productoSeleccionado.precio
-            };
-            
-            carrito.push(item);
+        function añadir() {
+            const t = document.getElementById('m-talla').value;
+            const c = document.getElementById('m-color').value;
+            carrito.push({ nombre: `${pSel.nombre} (Talla: ${t}, Color: ${c})`, precio: pSel.precio });
             localStorage.setItem('carrito_ciarene', JSON.stringify(carrito));
-            actualizarContador();
-            cerrarModal();
-            
-            // Animación de éxito
-            const Toast = document.createElement('div');
-            Toast.innerHTML = "¡Añadido con éxito! ✨";
-            Toast.style = "position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--dark); color:white; padding:10px 20px; border-radius:50px; z-index:3000;";
-            document.body.appendChild(Toast);
-            setTimeout(() => Toast.remove(), 2000);
+            actualizar();
+            cerrar();
         }
 
-        function actualizarContador() {
-            const count = document.getElementById('cart-count');
-            count.innerText = carrito.length;
-            count.classList.add('animate__animated', 'animate__bounceIn');
-            setTimeout(() => count.classList.remove('animate__bounceIn'), 1000);
-        }
-
-        window.onclick = (e) => { if(e.target.className == 'modal') cerrarModal(); }
-        window.onload = cargarProductos;
+        function actualizar() { document.getElementById('count').innerText = carrito.length; }
+        window.onload = cargar;
     </script>
 </body>
 </html>
