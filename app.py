@@ -3,12 +3,12 @@ import os
 
 app = Flask(__name__, static_folder='.')
 
-# Catálogo con descripciones profesionales
+# Catálogo con tus archivos locales de la barra lateral
 CATALOGO = [
-    {"id": 1, "nombre": "Camiseta Ciarené", "precio": 45000, "imagen": "camisetas.png", "tag": "Tendencia"},
-    {"id": 2, "nombre": "Pantalón Premium", "precio": 85000, "imagen": "pantalon.png", "tag": "Nuevo"},
-    {"id": 3, "nombre": "Pijama Seda", "precio": 65000, "imagen": "pijama.png", "tag": "Best Seller"},
-    {"id": 4, "nombre": "Sudadera Sport", "precio": 75000, "imagen": "sudadera.png", "tag": "Oferta"}
+    {"id": 1, "nombre": "Camiseta Ciarené", "precio": 45000, "imagen": "camisetas.png", "categoria": "TOP"},
+    {"id": 2, "nombre": "Pantalón Premium", "precio": 85000, "imagen": "pantalon.png", "categoria": "GALA"},
+    {"id": 3, "nombre": "Pijama Seda", "precio": 65000, "imagen": "pijama.png", "categoria": "RELAX"},
+    {"id": 4, "nombre": "Sudadera Sport", "precio": 75000, "imagen": "sudadera.png", "categoria": "URBAN"}
 ]
 
 @app.route('/')
@@ -22,6 +22,11 @@ def cart_page():
 @app.route('/api/productos')
 def api_productos():
     return jsonify(CATALOGO)
+
+# Ruta para que el navegador encuentre tus fotos locales
+@app.route('/<path:path>')
+def send_report(path):
+    return send_from_directory('.', path)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
