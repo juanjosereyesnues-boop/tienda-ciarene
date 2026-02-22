@@ -8,16 +8,16 @@
         body { font-family: 'Outfit'; padding: 40px 5%; background: #fff; }
         .container { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; }
-        .btn-wa { background: #25D366; color: white; border: none; padding: 20px; width: 100%; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1.2rem; margin-top: 20px; }
+        .btn-wa { background: #25D366; color: white; border: none; padding: 20px; width: 100%; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Tu Bolsa ✨</h1>
+        <h1>Tu Pedido 🌸</h1>
         <div id="lista"></div>
         <h2 id="total" style="text-align:right;"></h2>
-        <button class="btn-wa" onclick="enviar()">Pedir por WhatsApp 🌸</button>
-        <a href="/" style="display:block; text-align:center; margin-top:20px; color:#aaa; text-decoration:none;">Volver a la tienda</a>
+        <button class="btn-wa" onclick="enviar()">Pedir por WhatsApp</button>
+        <a href="/" style="display:block; text-align:center; margin-top:20px; color:#aaa; text-decoration:none;">← Volver</a>
     </div>
     <script>
         let cart = JSON.parse(localStorage.getItem('cart_ciarene')) || [];
@@ -25,13 +25,14 @@
             let t = 0;
             document.getElementById('lista').innerHTML = cart.map((p, i) => {
                 t += p.precio;
-                return `<div class="item"><span>${p.nombre}</span> <b>$${p.precio.toLocaleString()}</b></div>`;
+                return `<div class="item"><span>${p.nombre}</span> <b>$${p.precio.toLocaleString()}</b> <button onclick="del(${i})" style="border:none; background:none; color:red; cursor:pointer;">X</button></div>`;
             }).join('');
             document.getElementById('total').innerText = "Total: $" + t.toLocaleString();
         }
+        function del(i) { cart.splice(i,1); localStorage.setItem('cart_ciarene', JSON.stringify(cart)); render(); }
         function enviar() {
-            const msg = encodeURIComponent("¡Hola Ciarené! Quiero estos productos:\n" + cart.map(p => "- " + p.nombre).join("\n") + "\n\nTotal: " + document.getElementById('total').innerText);
-            window.location.href = "https://wa.me/573000000000?text=" + msg; // Pon el número de tu mamá aquí
+            const msg = encodeURIComponent("¡Hola! Quiero pedir:\n" + cart.map(p => "- " + p.nombre).join("\n") + "\nTotal: " + document.getElementById('total').innerText);
+            window.location.href = "https://wa.me/573000000000?text=" + msg;
         }
         render();
     </script>
