@@ -2,450 +2,126 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ciarené | Moda con Estilo</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Ciarené - Moda Femenina</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
     <style>
-        :root {
-            --primary: #ff4d6d;
-            --dark: #1a1a1a;
-            --light: #fdfdfd;
-            --ws: #25D366;
-        }
-        body {
-            background-color: red
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--light);
-            margin: 0;
-            color: var(--dark);
-        }
-
-        header {
-            background: white;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        header h1 {
-            font-size: 3rem;
-            margin: 0;
-            color: var(--dark);
-            letter-spacing: 2px;
-            font-weight: 700;
-        }
-
-        header span { color: var(--primary); }
-
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 40px 20px;
-        }
-
-        .grid-productos {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            transition: all 0.4s ease;
-            border: 1px solid #eee;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
-
-        .card img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-        }
-
-        .badge-oferta {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: var(--primary);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            z-index: 10;
-        }
-
-        .card-info {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .precio-viejo {
-            text-decoration: line-through;
-            color: #b2bec3;
-            margin-right: 10px;
-            font-size: 1rem;
-        }
-
-        .precio-actual {
-            color: var(--primary);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .btn-add {
-            background: var(--dark);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 15px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .btn-add:hover { background: var(--primary); }
-
-        /* Spinner */
-        .loader {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 200px;
-            width: 100%;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #eee;
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* Carrito Flotante */
-        .cart-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--ws);
-            color: white;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            cursor: pointer;
-            z-index: 2000;
-            transition: 0.3s;
-        }
-
-        .cart-float:hover { transform: scale(1.1); }
-
-        .cart-count {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: var(--primary);
-            padding: 5px 10px;
-            border-radius: 50%;
-            font-size: 0.8rem;
-        }
-        /* Estilos del Modal */
-.modal {
-    display: none; 
-    position: fixed;
-    z-index: 1000;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.8);
-    backdrop-filter: blur(5px);
-}
-
-.modal-content {
-    background-color: white;
-    margin: 5% auto;
-    width: 90%;
-    max-width: 500px;
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
-}
-
-#detalle-foto-container img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-}
-
-.modal-info {
-    padding: 20px;
-}
-
-.precio-grande {
-    font-size: 1.5rem;
-    color: var(--primary);
-    font-weight: bold;
-}
-
-.detalles-seleccion {
-    margin: 15px 0;
-}
-
-.color-dot {
-    height: 25px; width: 25px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 10px;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.color-dot:hover { transform: scale(1.2); }
-
-.btn-añadir-modal {
-    width: 100%;
-    padding: 15px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close-modal {
-    position: absolute;
-    right: 20px; top: 10px;
-    font-size: 30px;
-    color: white;
-    cursor: pointer;
-    z-index: 1001;
-}
+        :root { --primary: #ff4d6d; --dark: #2d3436; --light: #f9f9f9; }
+        body { font-family: 'Poppins', sans-serif; background: var(--light); margin: 0; }
+        .header { background: white; padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        #productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px; }
+        .card { background: white; border-radius: 15px; overflow: hidden; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; height: 350px; object-fit: cover; }
+        .card-info { padding: 15px; text-align: center; }
+        .precio-actual { color: var(--primary); font-weight: bold; font-size: 1.2rem; }
+        .precio-viejo { text-decoration: line-through; color: #aaa; margin-right: 10px; }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; margin-top: 10px; width: 100%; }
+        
+        /* ESTILOS MODAL */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+        .modal-content { background: white; margin: 5% auto; width: 90%; max-width: 450px; border-radius: 20px; overflow: hidden; animation: zoomIn 0.3s; }
+        .modal-info { padding: 25px; }
+        .form-select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #ddd; }
+        .close-modal { float: right; font-size: 25px; cursor: pointer; padding: 10px; }
+        .cart-badge { background: var(--primary); color: white; padding: 2px 8px; border-radius: 50%; font-size: 0.8rem; position: absolute; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1 class="animate__animated animate__fadeInDown">CIARE<span>NÉ</span></h1>
-        <p>Moda Exclusiva A Buen Precio 🛒 </p>
-        <p><h5>Pregunta Por Tallas O Informacion De Productos En:<span>(+57 312 2997227)</span></h5></p>
-    </header>
-
-    <div class="container">
-        <div id="productos" class="grid-productos">
-            <div class="loader"><div class="spinner"></div></div>
-        </div>
+    <div class="header">
+        <h1>Ciarené 👗</h1>
+        <a href="carrito.html" style="text-decoration: none; color: var(--dark);">
+            <i class="fas fa-shopping-cart"></i> Carrito <span id="cart-count" class="cart-badge">0</span>
+        </a>
     </div>
 
-    <div class="cart-float animate__animated animate__bounceIn" onclick="window.location.href='carrito.html'">
-        <i class="fas fa-shopping-bag"></i>
-        <span class="cart-count" id="cart-count">0</span>
-    </div>
+    <div id="productos"></div>
+
     <div id="modal-producto" class="modal">
-    <div class="modal-content animate__animated animate__zoomIn">
-        <span class="close-modal" onclick="cerrarModal()">&times;</span>
-        
-        <div id="detalle-foto-container">
-            <img id="modal-imagen" src="" alt="Producto">
-        </div>
-        
-        <div class="modal-info">
-            <h2 id="modal-nombre"></h2>
-            <p id="modal-precio" class="precio-grande"></p>
-            
-            <div class="detalles-seleccion">
-                <label>Talla:</label>
-                <select id="modal-talla">
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                </select>
+        <div class="modal-content">
+            <span class="close-modal" onclick="cerrarModal()">&times;</span>
+            <img id="modal-imagen" src="" style="width: 100%; height: 300px; object-fit: cover;">
+            <div class="modal-info">
+                <h2 id="modal-nombre" style="margin: 0;"></h2>
+                <p id="modal-descripcion" style="color: #666; font-size: 0.9rem; margin: 10px 0;"></p>
+                <p id="modal-precio" class="precio-actual"></p>
+                
+                <label>Elegir Talla:</label>
+                <select id="modal-talla" class="form-select"></select>
 
-                <label>Color:</label>
-                <div class="opciones-color">
-                    <span class="color-dot" style="background: black;" onclick="seleccionarColor(this)"></span>
-                    <span class="color-dot" style="background: pink;" onclick="seleccionarColor(this)"></span>
-                    <span class="color-dot" style="background: Red;" onclick="seleccionarColor(this)"></span>
-                    <span class="color-dot" style="background: white; border: 1px solid #ccc;" onclick="seleccionarColor(this)"></span>
-                </div>
+                <label>Elegir Color:</label>
+                <select id="modal-color" class="form-select"></select>
+
+                <button class="btn-add" onclick="añadirDesdeModal()" style="font-size: 1.1rem; padding: 15px;">
+                    Añadir al Pedido
+                </button>
             </div>
-
-            <p class="descripcion-texto">
-                Material de alta calidad, cómodo y perfecto para cualquier ocasión. 
-                Envío disponible a todo el país.
-            </p>
-
-            <button class="btn-añadir-modal" onclick="añadirDesdeModal()">
-                Añadir al Carrito
-            </button>
         </div>
     </div>
-</div>
 
     <script>
-    // Configuración inicial
-    const API_URL = "https://ciarene.up.railway.app/api/productos";
-    let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
-    let productoSeleccionado = null; 
+        const API_URL = "https://ciarene.up.railway.app/api/productos";
+        let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
+        let productoSeleccionado = null;
 
-    // 1. CARGAR PRODUCTOS (Tu lógica original con mejora para el modal)
-    async function cargarProductos() {
-        try {
-            const res = await fetch(API_URL);
-            const json = await res.json();
-            const container = document.getElementById('productos');
-            container.innerHTML = '';
+        async function cargarProductos() {
+            try {
+                const res = await fetch(API_URL);
+                const json = await res.json();
+                const container = document.getElementById('productos');
+                container.innerHTML = '';
 
-            json.data.forEach((p, i) => {
-                const tieneOferta = p.precio_viejo != null;
-                // Preparamos el objeto para el modal sin romper el HTML
-                const pString = JSON.stringify(p).replace(/"/g, '&quot;');
-                
-                container.innerHTML += `
-                    <div class="card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s" onclick="abrirModal(${pString})">
-                        ${tieneOferta ? '<div class="badge-oferta">OFERTA 💰</div>' : ''}
-                        <img src="${p.imagen}" onerror="this.src='https://via.placeholder.com/350x450?text=Ciarené+Moda'">
-                        <div class="card-info">
-                            <h3>${p.nombre}</h3>
-                            <div>
-                                ${tieneOferta ? `<span class="precio-viejo">$${p.precio_viejo.toLocaleString()}</span>` : ''}
+                json.data.forEach((p, i) => {
+                    const pString = JSON.stringify(p).replace(/"/g, '&quot;');
+                    container.innerHTML += `
+                        <div class="card animate__animated fadeInUp" onclick="abrirModal(${pString})">
+                            <img src="${p.imagen}">
+                            <div class="card-info">
+                                <h3>${p.nombre}</h3>
                                 <span class="precio-actual">$${p.precio.toLocaleString()}</span>
+                                <button class="btn-add">Ver Detalles</button>
                             </div>
-                            <button class="btn-add" onclick="event.stopPropagation(); abrirModal(${pString})">
-                                <i class="fas fa-plus"></i> Ver Detalles
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            actualizarContador();
-        } catch (e) {
-            console.error(e);
-            document.getElementById('productos').innerHTML = "Se A Producio Un Error, Estamos En Ello";
-        }
-    }
-
-    // 2. FUNCIONES DEL MODAL (Lo nuevo para ver detalles)
-    function abrirModal(p) {
-        productoSeleccionado = p;
-        
-        // Ponemos los datos básicos
-        document.getElementById('modal-imagen').src = p.imagen;
-        document.getElementById('modal-nombre').innerText = p.nombre;
-        document.getElementById('modal-precio').innerText = `$${p.precio.toLocaleString()}`;
-        
-        // Llenamos las TALLAS dinámicamente desde el Python
-        const selectTalla = document.getElementById('modal-talla');
-        if (selectTalla) {
-            selectTalla.innerHTML = ''; 
-            if (p.tallas && p.tallas.length > 0) {
-                p.tallas.forEach(t => {
-                    selectTalla.innerHTML += `<option value="${t}">${t}</option>`;
+                        </div>`;
                 });
-            } else {
-                selectTalla.innerHTML = `<option value="Única">Talla Única</option>`;
-            }
+                actualizarContador();
+            } catch (e) { container.innerHTML = "Error al cargar productos."; }
         }
 
-        // Mostramos el modal
-        const modal = document.getElementById('modal-producto');
-        if (modal) {
-            modal.style.display = "block";
-            document.body.style.overflow = "hidden"; // Quita el scroll de fondo
+        function abrirModal(p) {
+            productoSeleccionado = p;
+            document.getElementById('modal-imagen').src = p.imagen;
+            document.getElementById('modal-nombre').innerText = p.nombre;
+            document.getElementById('modal-descripcion').innerText = p.descripcion;
+            document.getElementById('modal-precio').innerText = `$${p.precio.toLocaleString()}`;
+            
+            const selectTalla = document.getElementById('modal-talla');
+            selectTalla.innerHTML = p.tallas.map(t => `<option value="${t}">${t}</option>`).join('');
+            
+            const selectColor = document.getElementById('modal-color');
+            selectColor.innerHTML = p.colores.map(c => `<option value="${c}">${c}</option>`).join('');
+
+            document.getElementById('modal-producto').style.display = "block";
         }
-    }
 
-    function cerrarModal() {
-        document.getElementById('modal-producto').style.display = "none";
-        document.body.style.overflow = "auto"; // Devuelve el scroll
-    }
+        function cerrarModal() { document.getElementById('modal-producto').style.display = "none"; }
 
-    function añadirDesdeModal() {
-        if (!productoSeleccionado) return;
-        
-        const talla = document.getElementById('modal-talla').value;
-        // Llamamos a tu función agregar original con el detalle de la talla
-        agregar(`${productoSeleccionado.nombre} (Talla: ${talla})`, productoSeleccionado.precio);
-        
-        cerrarModal();
-    }
-
-    // Cerrar si hacen clic fuera de la caja
-    window.onclick = function(event) {
-        const modal = document.getElementById('modal-producto');
-        if (event.target == modal) {
+        function añadirDesdeModal() {
+            const talla = document.getElementById('modal-talla').value;
+            const color = document.getElementById('modal-color').value;
+            const nombreCompleto = `${productoSeleccionado.nombre} (Talla: ${talla}, Color: ${color})`;
+            
+            carrito.push({ nombre: nombreCompleto, precio: productoSeleccionado.precio });
+            localStorage.setItem('carrito_ciarene', JSON.stringify(carrito));
+            actualizarContador();
             cerrarModal();
+            alert("¡Añadido!");
         }
-    }
 
-    // 3. TUS FUNCIONES ORIGINALES (Intactas)
-    function agregar(n, p) {
-        carrito.push({ nombre: n, precio: p });
-        localStorage.setItem('carrito_ciarene', JSON.stringify(carrito));
-        actualizarContador();
-        
-        // Animación si el clic vino de un botón con clase btn-add
-        if (window.event && window.event.target && window.event.target.closest('.btn-add')) {
-            const btn = window.event.target.closest('.btn-add');
-            const textoOriginal = btn.innerHTML;
-            btn.innerHTML = "¡Añadido!";
-            setTimeout(() => { btn.innerHTML = textoOriginal; }, 1000);
-        }
-    }
+        function actualizarContador() { document.getElementById('cart-count').innerText = carrito.length; }
 
-    function actualizarContador() {
-        const countEl = document.getElementById('cart-count');
-        if (countEl) {
-            countEl.innerText = carrito.length;
-        }
-    }
-
-    // Iniciar
-    window.onload = cargarProductos;
-</script>
+        window.onclick = (e) => { if(e.target.className == 'modal') cerrarModal(); }
+        window.onload = cargarProductos;
+    </script>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
