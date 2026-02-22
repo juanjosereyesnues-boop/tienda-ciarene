@@ -1,87 +1,39 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenida a Ciarené</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Ciarené - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        :root { --primary: #ff4d6d; --dark: #2d3436; }
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
-            height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0;
-        }
-        .login-card {
-            background: white; padding: 40px; border-radius: 35px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-            width: 100%; max-width: 380px; text-align: center;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .logo { color: var(--primary); font-size: 2.5rem; font-weight: 700; margin-bottom: 5px; letter-spacing: -1px; }
-        h2 { font-size: 1.1rem; color: #777; margin-bottom: 30px; font-weight: 300; }
-        .input-group { margin-bottom: 15px; position: relative; }
-        input {
-            width: 100%; padding: 15px 20px; border-radius: 50px; 
-            border: 1.5px solid #eee; background: #fdfdfd; 
-            box-sizing: border-box; font-family: 'Poppins'; transition: 0.3s;
-        }
-        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(255,77,109,0.1); }
-        .btn-login {
-            background: var(--primary); color: white; border: none;
-            width: 100%; padding: 16px; border-radius: 50px;
-            font-size: 1.1rem; font-weight: 600; cursor: pointer;
-            margin-top: 15px; transition: 0.4s;
-        }
-        .btn-login:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(255,77,109,0.4); }
-        .switch { margin-top: 25px; font-size: 0.9rem; color: #888; }
-        .switch a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
+        body { margin: 0; font-family: 'Poppins'; background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4); background-size: 400% 400%; animation: gradient 15s ease infinite; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        @keyframes gradient { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
+        .card { background: rgba(255,255,255,0.8); backdrop-filter: blur(15px); padding: 40px; border-radius: 40px; width: 320px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.1); border: 1px solid white; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 50px; border: none; outline: none; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #ff4d6d; color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(255,77,109,0.3); }
+        a { color: #ff4d6d; text-decoration: none; font-size: 0.8rem; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="login-card animate__animated animate__fadeInUp">
-        <div class="logo">Ciarené</div>
-        <h2 id="titulo">Moda que te hace brillar ✨</h2>
-        
-        <div class="input-group">
-            <input type="email" id="email" placeholder="Correo electrónico">
-        </div>
-        <div class="input-group">
-            <input type="password" id="pass" placeholder="Contraseña">
-        </div>
-        
-        <button class="btn-login" onclick="enviar()">Entrar a la tienda</button>
-
-        <div class="switch">
-            <span id="texto-cambio">¿Eres nueva en la familia?</span> <br>
-            <a onclick="cambiar()" id="link">Crear mi cuenta VIP</a>
-        </div>
+    <div class="card animate__animated animate__zoomIn">
+        <h1 style="color:#ff4d6d; margin:0">Ciarené</h1>
+        <p id="sub">Bienvenida a tu boutique</p>
+        <input type="email" id="email" placeholder="Correo electrónico">
+        <input type="password" id="pass" placeholder="Contraseña">
+        <button onclick="auth()">Entrar</button>
+        <p><a onclick="modo()" id="lnk">¿Eres nueva? Regístrate aquí</a></p>
     </div>
-
     <script>
-        let esRegistro = false;
-        function cambiar() {
-            esRegistro = !esRegistro;
-            document.getElementById('titulo').innerText = esRegistro ? "Crea tu cuenta exclusiva 🌸" : "Moda que te hace brillar ✨";
-            document.getElementById('link').innerText = esRegistro ? "Ya soy parte de la familia" : "Crear mi cuenta VIP";
-            document.getElementById('texto-cambio').innerText = esRegistro ? "¿Ya tienes cuenta?" : "¿Eres nueva en la familia?";
-        }
-        async function enviar() {
+        let esReg = false;
+        function modo() { esReg = !esReg; document.getElementById('sub').innerText = esReg ? 'Crea tu cuenta VIP' : 'Bienvenida a tu boutique'; document.getElementById('lnk').innerText = esReg ? 'Ya tengo cuenta' : '¿Eres nueva? Regístrate aquí'; }
+        async function auth() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('pass').value;
-            if(!email || !password) return alert("Por favor, llena todos los campos");
-            
-            const res = await fetch('/api/auth', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ email, password, tipo: esRegistro ? 'registro' : 'login' })
-            });
-            const data = await res.json();
-            if(data.status === 'success') {
-                localStorage.setItem('usuario_ciarene', email);
-                window.location.href = "/tienda";
-            } else { alert(data.message); }
+            const res = await fetch('/api/auth', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({email, password, tipo: esReg?'registro':'login'}) });
+            const d = await res.json();
+            if(d.status === 'success') { localStorage.setItem('u_ciarene', email); window.location.href='/tienda'; } else { alert(d.message); }
         }
     </script>
 </body>
