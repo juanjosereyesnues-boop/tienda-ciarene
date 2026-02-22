@@ -1,44 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ciarené - Carrito</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <title>Mi Carrito Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        body { background: #fdfcfb; font-family: 'Poppins'; padding: 20px; }
-        .cart-card { background: white; max-width: 500px; margin: auto; border-radius: 40px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-        .item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; }
-        .btn-wa { width: 100%; padding: 20px; background: #25D366; color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
+        body { font-family: 'Outfit'; background: #fff; padding: 50px 8%; }
+        .wrapper { max-width: 800px; margin: auto; }
+        .cart-item { 
+            display: flex; align-items: center; gap: 30px; padding: 30px; 
+            background: white; border-radius: 30px; margin-bottom: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05); transition: 0.3s;
+        }
+        .cart-item:hover { transform: scale(1.02); }
+        .cart-item img { width: 120px; height: 120px; border-radius: 20px; object-fit: cover; }
+        .total-box { 
+            background: #0f0f0f; color: white; padding: 40px; border-radius: 40px; 
+            margin-top: 50px; text-align: center;
+        }
+        .btn-wa { 
+            background: #25D366; color: white; padding: 25px 50px; border: none; 
+            border-radius: 50px; font-size: 1.3rem; font-weight: 800; cursor: pointer;
+            margin-top: 20px; width: 100%; transition: 0.4s;
+        }
+        .btn-wa:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(37,211,102,0.3); }
     </style>
 </head>
 <body>
-    <div class="cart-card animate__animated animate__zoomIn">
-        <h1 style="color:#ff4d6d; text-align:center">Mi Pedido ✨</h1>
+    <div class="wrapper animate__animated animate__fadeIn">
+        <h1 style="font-size: 3rem; letter-spacing: -2px;">Tu Bolsa 🌸</h1>
         <div id="lista"></div>
-        <h2 id="total" style="text-align:right"></h2>
-        <button class="btn-wa" onclick="comprar()">Pedir por WhatsApp 🌸</button>
-        <a href="/tienda" style="display:block; text-align:center; margin-top:15px; color:#aaa; text-decoration:none">Seguir comprando</a>
+        <div class="total-box">
+            <h2 id="total" style="font-size: 2.5rem; margin: 0;">Total: $0</h2>
+            <button class="btn-wa" onclick="pedir()">Pedir por WhatsApp ✨</button>
+        </div>
     </div>
 
     <script>
-        let car = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
         function render() {
-            const l = document.getElementById('lista');
+            const cont = document.getElementById('lista');
             let t = 0;
-            l.innerHTML = car.map((p, i) => {
+            cont.innerHTML = cart.map((p, i) => {
                 t += p.precio;
-                return `<div class="item"><span>${p.nombre}</span><b>$${p.precio.toLocaleString()}</b></div>`;
+                return `
+                <div class="cart-item animate__animated animate__fadeInLeft" style="animation-delay: ${i*0.1}s">
+                    <img src="${p.imagen}">
+                    <div style="flex:1">
+                        <h3 style="margin:0">${p.nombre}</h3>
+                        <p style="color:#888; margin: 5px 0;">Talla: ${p.talla}</p>
+                        <b style="color:#ff4d6d; font-size:1.2rem">$${p.precio.toLocaleString()}</b>
+                    </div>
+                    <button onclick="borrar(${i})" style="background:none; border:none; color:#ccc; font-size:1.5rem; cursor:pointer;">&times;</button>
+                </div>`;
             }).join('');
             document.getElementById('total').innerText = `Total: $${t.toLocaleString()}`;
         }
-
-        function comprar() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            const texto = encodeURIComponent(`¡Hola Ciarené! Quiero estos productos:\n${car.map(p=>"- "+p.nombre).join('\n')}\nTotal: ${document.getElementById('total').innerText}`);
-            setTimeout(() => window.location.href = `https://wa.me/TUNUMERO?text=${texto}`, 1000);
+        function borrar(i) { cart.splice(i, 1); localStorage.setItem('cart', JSON.stringify(cart)); render(); }
+        function pedir() {
+            const msg = encodeURIComponent("¡Hola Ciarené! Quiero realizar este pedido:\n" + cart.map(p => `- ${p.nombre} (${p.talla})`).join('\n') + `\n\nTotal: ${document.getElementById('total').innerText}`);
+            window.location.href = `https://wa.me/TUNUMERO?text=${msg}`;
         }
         render();
     </script>
