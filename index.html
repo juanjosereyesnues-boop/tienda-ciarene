@@ -3,63 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ciarené Boutique | Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <title>CIARENÉ | Luxury Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --p: #ff4d6d; --d: #1a1a1a; --bg: #fff5f7; }
-        body { font-family: 'Outfit', sans-serif; margin: 0; background: var(--bg); overflow-x: hidden; }
+        :root { --p: #ff4d6d; --d: #1a1a1a; --glass: rgba(255, 255, 255, 0.7); }
+        body { font-family: 'Outfit', sans-serif; margin: 0; background: #fff; color: var(--d); overflow-x: hidden; }
         
+        /* Fondo Animado */
+        .bg-gradient {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #fff5f7, #ffffff, #ffe0e6);
+            background-size: 400% 400%; z-index: -1; animation: gradient 15s ease infinite;
+        }
+        @keyframes gradient { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
+
         header { 
-            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px);
-            padding: 15px 8%; display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
+            background: var(--glass); backdrop-filter: blur(20px);
+            padding: 20px 8%; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,77,109,0.1);
         }
-        .logo { font-size: 2.2rem; font-weight: 900; letter-spacing: -2px; color: var(--d); }
+        .logo { font-size: 2.5rem; font-weight: 900; color: var(--d); text-decoration: none; letter-spacing: -3px; }
         .logo span { color: var(--p); }
+
+        .hero { padding: 80px 8%; text-align: center; }
+        .hero h2 { font-size: 4rem; margin: 0; font-weight: 900; line-height: 1; letter-spacing: -2px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; padding: 0 8% 80px; }
         
-        .cart-btn { 
-            background: var(--d); color: white; padding: 12px 25px; border-radius: 50px; 
-            text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 10px; transition: 0.3s;
-        }
-        .cart-btn:hover { background: var(--p); transform: scale(1.05); }
-
-        .hero { text-align: center; padding: 60px 5%; animation: fadeIn 1.5s; }
-        .hero h2 { font-size: 3.5rem; margin: 0; font-weight: 900; line-height: 1; color: var(--d); }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 35px; padding: 40px 8%; }
         .card { 
-            background: white; border-radius: 35px; overflow: hidden; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.03); transition: 0.5s; position: relative;
+            background: white; border-radius: 40px; overflow: hidden; position: relative;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.02);
         }
-        .card:hover { transform: translateY(-15px); box-shadow: 0 30px 60px rgba(255, 77, 109, 0.2); }
+        .card:hover { transform: translateY(-20px) scale(1.02); box-shadow: 0 40px 80px rgba(255, 77, 109, 0.2); }
         
-        .tag { position: absolute; top: 20px; left: 20px; background: var(--p); color: white; padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; }
-        
-        .card img { width: 100%; height: 400px; object-fit: cover; transition: 0.5s; }
-        .card:hover img { transform: scale(1.05); }
-        
-        .info { padding: 25px; text-align: center; }
-        .info h3 { margin: 0; font-size: 1.5rem; color: var(--d); }
-        .price { font-size: 1.8rem; font-weight: 900; color: var(--p); display: block; margin: 10px 0; }
-        
+        .card img { width: 100%; height: 450px; object-fit: cover; transition: 0.6s; }
+        .card:hover img { transform: scale(1.1); }
+
+        .overlay { 
+            position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, white, transparent);
+            padding: 30px; text-align: center; 
+        }
         .btn-add { 
-            background: var(--d); color: white; border: none; padding: 15px; width: 100%; 
-            border-radius: 18px; font-weight: 900; cursor: pointer; transition: 0.3s;
+            background: var(--d); color: white; border: none; padding: 18px 40px; 
+            border-radius: 20px; font-weight: 900; cursor: pointer; transition: 0.3s;
+            width: 80%; font-size: 1rem;
         }
-        .btn-add:hover { background: var(--p); }
+        .btn-add:hover { background: var(--p); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255,77,109,0.3); }
+
+        #count { background: var(--p); color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.9rem; margin-left: 10px; }
     </style>
 </head>
 <body>
+    <div class="bg-gradient"></div>
     <header class="animate__animated animate__fadeInDown">
-        <div class="logo">CIARE<span>NÉ</span></div>
-        <a href="/carrito" class="cart-btn">🛒 <span id="count">0</span></a>
+        <a href="/" class="logo">CIARE<span>NÉ</span></a>
+        <a href="/carrito" style="text-decoration:none; color:var(--d); font-weight:900;">
+            BOLSA <span id="count">0</span>
+        </a>
     </header>
 
-    <div class="hero">
-        <p style="color:var(--p); font-weight:bold; letter-spacing:3px;">NUEVA COLECCIÓN</p>
-        <h2>Moda que Resalta <br> Tu Estilo</h2>
+    <div class="hero animate__animated animate__zoomIn">
+        <p style="color:var(--p); font-weight:900; letter-spacing:5px;">COLECCIÓN 2026</p>
+        <h2>Vístete con <br> Propósito.</h2>
     </div>
 
     <div class="grid" id="lista"></div>
@@ -68,16 +76,16 @@
         let prods = [];
         let cart = JSON.parse(localStorage.getItem('cart_ciarene')) || [];
 
-        async function init() {
+        async function load() {
             const res = await fetch('/api/productos');
             prods = await res.json();
             document.getElementById('lista').innerHTML = prods.map((p, i) => `
-                <div class="card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s">
-                    <div class="tag">${p.tag}</div>
-                    <img src="${p.imagen}" onerror="this.src='https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500'">
-                    <div class="info">
-                        <h3>${p.nombre}</h3>
-                        <span class="price">$${p.precio.toLocaleString()}</span>
+                <div class="card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.2}s">
+                    <img src="${p.imagen}">
+                    <div class="overlay">
+                        <small style="color:var(--p); font-weight:900; letter-spacing:2px;">${p.categoria}</small>
+                        <h3 style="margin:5px 0 15px;">${p.nombre}</h3>
+                        <p style="font-size:1.5rem; font-weight:900; margin-bottom:20px;">$${p.precio.toLocaleString()}</p>
                         <button class="btn-add" onclick="add(${p.id})">Añadir a la Bolsa</button>
                     </div>
                 </div>`).join('');
@@ -90,7 +98,7 @@
             document.getElementById('count').innerText = cart.length;
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 }, colors: ['#ff4d6d', '#1a1a1a'] });
         }
-        init();
+        load();
     </script>
 </body>
 </html>
