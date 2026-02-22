@@ -2,56 +2,302 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Carrito Ciarené</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Carrito Premium - Ciarené</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        :root { --primary: #ff4d6d; --secondary: #25D366; }
-        body { font-family: 'Poppins', sans-serif; display: flex; justify-content: center; padding: 20px; background: #f9f9f9; }
-        .card-cart { background: white; padding: 30px; border-radius: 20px; width: 100%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .total { font-size: 1.5rem; font-weight: bold; margin: 20px 0; text-align: right; color: var(--primary); }
-        .btn-wa { background: var(--secondary); color: white; border: none; width: 100%; padding: 15px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; }
+        :root {
+            --primary: #ff4d6d;
+            --primary-dark: #cc3d57;
+            --secondary: #25D366;
+            --dark: #2d3436;
+            --light: #f4f7f6;
+            --white: #ffffff;
+            --gray: #dfe6e9;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .cart-container {
+            background: var(--white);
+            width: 100%;
+            max-width: 550px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: animate__fadeInUp 0.6s;
+        }
+
+        .cart-header {
+            background: var(--primary);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .cart-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .cart-header i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .cart-body {
+            padding: 30px;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        /* Diseño de cada item */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: var(--light);
+            border-radius: 15px;
+            transition: 0.3s;
+            border-left: 5px solid var(--primary);
+        }
+
+        .cart-item:hover {
+            transform: scale(1.02);
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .item-details {
+            flex-grow: 1;
+            padding-right: 15px;
+        }
+
+        .item-name {
+            display: block;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--dark);
+        }
+
+        .item-price {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .btn-remove {
+            color: #b2bec3;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .btn-remove:hover {
+            color: #d63031;
+        }
+
+        /* Footer del Carrito */
+        .cart-footer {
+            padding: 30px;
+            background: #fff;
+            border-top: 2px dashed var(--gray);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .total-label {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #636e72;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .btn-send {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-send:hover {
+            background: #1ebc59;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-clear {
+            display: block;
+            width: 100%;
+            background: transparent;
+            color: #b2bec3;
+            border: none;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: #b2bec3;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <div class="card-cart">
-        <h2>Tu Pedido 📃</h2>
-        <div id="lista"></div>
-        <div class="total" id="total">Total: $0</div>
-        <button class="btn-wa" onclick="enviar()">Enviar a WhatsApp</button>
-        <br><br>
-        <a href="/" style="text-align: center; display: block; color: #888;">Seguir comprando</a>
+
+    <div class="cart-container">
+        <div class="cart-header">
+            <i class="fas fa-shopping-bag animate__animated animate__bounceIn"></i>
+            <h2>Mi Pedido Ciarené</h2>
+        </div>
+
+        <div class="cart-body" id="cart-items">
+            </div>
+
+        <div class="cart-footer">
+            <div class="total-row">
+                <span class="total-label">Total a pagar:</span>
+                <span class="total-amount" id="cart-total">$0</span>
+            </div>
+
+            <button class="btn-send" onclick="enviarPedido()">
+                <i class="fab fa-whatsapp"></i> Confirmar Pedido
+            </button>
+
+            <button class="btn-clear" onclick="vaciarCarrito()">Vaciar carrito</button>
+
+            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Seguir comprando</a>
+        </div>
     </div>
 
     <script>
         const CART_KEY = 'carrito_ciarene';
         let carrito = JSON.parse(localStorage.getItem(CART_KEY)) || [];
 
-        function render() {
-            const list = document.getElementById('lista');
+        function renderCarrito() {
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
             let total = 0;
-            list.innerHTML = carrito.length ? '' : 'Carrito vacío';
-            carrito.forEach((p, i) => {
+
+            if (carrito.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <p>Tu carrito está vacío.<br>¡Busca algo lindo para ti!</p>
+                    </div>`;
+                totalEl.innerText = "$0";
+                document.querySelector('.btn-send').disabled = true;
+                document.querySelector('.btn-send').style.opacity = "0.5";
+                return;
+            }
+
+            container.innerHTML = '';
+            document.querySelector('.btn-send').disabled = false;
+            document.querySelector('.btn-send').style.opacity = "1";
+
+            carrito.forEach((p, index) => {
                 total += p.precio;
-                list.innerHTML += `<div class="item"><span>${p.nombre}</span> <b>$${p.precio.toLocaleString()}</b></div>`;
+                container.innerHTML += `
+                    <div class="cart-item animate__animated animate__fadeInLeft" style="animation-delay: ${index * 0.1}s">
+                        <div class="item-details">
+                            <span class="item-name">${p.nombre}</span>
+                            <span class="item-price">$${p.precio.toLocaleString('es-CO')}</span>
+                        </div>
+                        <i class="fas fa-trash-alt btn-remove" onclick="eliminarItem(${index})"></i>
+                    </div>`;
             });
-            document.getElementById('total').innerText = `Total: $${total.toLocaleString()}`;
+
+            totalEl.innerText = `$${total.toLocaleString('es-CO')}`;
         }
 
-        function enviar() {
-            if(!carrito.length) return alert("Vacio");
-            let msg = "¡Hola Ciarené! Quiero pedir:\n\n";
+        function eliminarItem(index) {
+            carrito.splice(index, 1);
+            localStorage.setItem(CART_KEY, JSON.stringify(carrito));
+            renderCarrito();
+        }
+
+        function vaciarCarrito() {
+            if(confirm("¿Estás seguro de que quieres vaciar el carrito?")) {
+                carrito = [];
+                localStorage.removeItem(CART_KEY);
+                renderCarrito();
+            }
+        }
+
+        function enviarPedido() {
+            let mensaje = "¡Hola Ciarené! ✨\nHe seleccionado estos productos en tu tienda:\n\n";
             let total = 0;
+
             carrito.forEach((p, i) => {
-                msg += `*${i+1}.* ${p.nombre} - $${p.precio.toLocaleString()}\n`;
+                mensaje += `*${i+1}.* ${p.nombre}\n   _Precio: $${p.precio.toLocaleString('es-CO')}_\n\n`;
                 total += p.precio;
             });
-            msg += `\n*TOTAL: $${total.toLocaleString()}*`;
-            window.open(`https://wa.me/573122997227?text=${encodeURIComponent(msg)}`);
-            localStorage.removeItem(CART_KEY);
-            location.href = "/";
+
+            mensaje += `*Total a pagar: $${total.toLocaleString('es-CO')}*\n\n`;
+            mensaje += "¿Me podrías confirmar disponibilidad? Muchas gracias. 😊";
+
+            const url = `https://wa.me/573122997227?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+            
+            // Opcional: Vaciar después de enviar
+            // localStorage.removeItem(CART_KEY);
+            // location.href = "/";
         }
-        render();
+
+        window.onload = renderCarrito;
     </script>
 </body>
 </html>
