@@ -2,36 +2,44 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Carrito | Ciarené</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <title>Mi Bolsa | Ciarené</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Outfit'; padding: 40px 5%; background: #fff; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; }
-        .btn-wa { background: #25D366; color: white; border: none; padding: 20px; width: 100%; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        body { font-family: 'Outfit'; background: #fff; padding: 50px 5%; }
+        .checkout-box { max-width: 600px; margin: auto; background: white; border-radius: 40px; padding: 40px; border: 1px solid #eee; }
+        .item { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #f9f9f9; }
+        .total-row { margin-top: 30px; text-align: right; font-size: 2rem; font-weight: 900; }
+        .btn-wa { 
+            background: #25D366; color: white; border: none; padding: 25px; width: 100%; 
+            border-radius: 25px; font-weight: 900; font-size: 1.3rem; cursor: pointer; margin-top: 30px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Tu Pedido 🌸</h1>
+    <div class="checkout-box">
+        <h1 style="font-size: 3rem; margin-bottom: 10px;">Tu Bolsa 🌸</h1>
         <div id="lista"></div>
-        <h2 id="total" style="text-align:right;"></h2>
-        <button class="btn-wa" onclick="enviar()">Pedir por WhatsApp</button>
-        <a href="/" style="display:block; text-align:center; margin-top:20px; color:#aaa; text-decoration:none;">← Volver</a>
+        <div class="total-row" id="total"></div>
+        <button class="btn-wa" onclick="pedir()">Completar Pedido por WhatsApp</button>
+        <a href="/" style="display:block; text-align:center; margin-top:20px; color:#aaa; text-decoration:none;">← Seguir comprando</a>
     </div>
+
     <script>
         let cart = JSON.parse(localStorage.getItem('cart_ciarene')) || [];
         function render() {
             let t = 0;
             document.getElementById('lista').innerHTML = cart.map((p, i) => {
                 t += p.precio;
-                return `<div class="item"><span>${p.nombre}</span> <b>$${p.precio.toLocaleString()}</b> <button onclick="del(${i})" style="border:none; background:none; color:red; cursor:pointer;">X</button></div>`;
+                return `<div class="item">
+                    <div><strong>${p.nombre}</strong><br><small>$${p.precio.toLocaleString()}</small></div>
+                    <button onclick="remove(${i})" style="color:red; border:none; background:none; cursor:pointer;">Eliminar</button>
+                </div>`;
             }).join('');
             document.getElementById('total').innerText = "Total: $" + t.toLocaleString();
         }
-        function del(i) { cart.splice(i,1); localStorage.setItem('cart_ciarene', JSON.stringify(cart)); render(); }
-        function enviar() {
-            const msg = encodeURIComponent("¡Hola! Quiero pedir:\n" + cart.map(p => "- " + p.nombre).join("\n") + "\nTotal: " + document.getElementById('total').innerText);
+        function remove(i) { cart.splice(i,1); localStorage.setItem('cart_ciarene', JSON.stringify(cart)); render(); }
+        function pedir() {
+            const msg = encodeURIComponent("¡Hola Ciarené! Quiero estos productos:\n" + cart.map(p => "• " + p.nombre).join("\n") + "\n\nTotal: " + document.getElementById('total').innerText);
             window.location.href = "https://wa.me/573000000000?text=" + msg;
         }
         render();
