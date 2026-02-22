@@ -2,15 +2,12 @@ from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 
-# Agregamos static_folder='.' para que Flask sepa buscar el HTML en la raíz
 app = Flask(__name__, static_folder='.')
 CORS(app)
 
-# Configuración de carpetas
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARPETA_FOTOS = os.path.join(BASE_DIR, 'imagenes')
 
-# --- ESTO ES LO QUE SOLUCIONA EL ERROR 404 EN RAILWAY ---
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
@@ -18,14 +15,11 @@ def index():
 @app.route('/carrito.html')
 def carrito():
     return send_from_directory('.', 'carrito.html')
-# -------------------------------------------------------
 
-# Servir imágenes locales de forma profesional
 @app.route('/fotos/<path:filename>')
 def servir_foto(filename):
     return send_from_directory(CARPETA_FOTOS, filename)
 
-# Catálogo actualizado con Tallas y Colores para el Modal tipo Temu
 CATALOGO_ROPA = [
     {
         "id": 1,
@@ -34,8 +28,9 @@ CATALOGO_ROPA = [
         "precio_viejo": 85000,
         "imagen": "https://ciarene.up.railway.app/fotos/pijama.png",
         "categoria": "Pijamas",
-        "tallas": ["S", "L"],
-        "colores": ["<h1>Consulte En La Compra"]
+        "tallas": ["S", "M", "L"],
+        "colores": ["Rosado", "Negro", "Azul"],
+        "descripcion": "Hermosa pijama de seda satinada, suave al tacto y fresca para dormir."
     },
     {
         "id": 2,
@@ -44,8 +39,9 @@ CATALOGO_ROPA = [
         "precio_viejo": None,
         "imagen": "https://ciarene.up.railway.app/fotos/sudadera.png",
         "categoria": "Deportivo",
-        "tallas": ["Única"],
-        "colores": ["Rojo", "Negro"]
+        "tallas": ["M", "L", "XL"],
+        "colores": ["Gris", "Verde", "Negro"],
+        "descripcion": "Conjunto de licra de alta compresión, ideal para gimnasio o trotar."
     },
     {
         "id": 3,
@@ -55,7 +51,8 @@ CATALOGO_ROPA = [
         "imagen": "https://ciarene.up.railway.app/fotos/camisetas.png",
         "categoria": "Camisas",
         "tallas": ["S", "M", "L", "XL"],
-        "colores": ["Blanco", "Negro", "Rojo"]
+        "colores": ["Blanco", "Negro", "Rojo"],
+        "descripcion": "Camisetas en tela fría que no acalora, perfectas para clima cálido."
     },
     {
         "id": 4,
@@ -65,7 +62,8 @@ CATALOGO_ROPA = [
         "imagen": "https://ciarene.up.railway.app/fotos/pantalon.png",
         "categoria": "Pantalones",
         "tallas": ["6", "8", "10", "12"],
-        "colores": ["Azul Oscuro", "Negro"]
+        "colores": ["Azul Oscuro", "Negro"],
+        "descripcion": "Pantalón bota ancha con taches decorativos, tendencia 2026."
     },
     {
         "id": 5,
@@ -75,7 +73,8 @@ CATALOGO_ROPA = [
         "imagen": "https://ciarene.up.railway.app/fotos/pijama2.jpeg",
         "categoria": "Pijamas",
         "tallas": ["Única"],
-        "colores": ["Estampado"]
+        "colores": ["Estampado"],
+        "descripcion": "Pijamas cómodas con diseños animados y divertidos."
     }
 ]
 
@@ -88,9 +87,5 @@ def get_productos():
     })
 
 if __name__ == '__main__':
-    # Railway usa la variable de entorno PORT
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
-
-
-
