@@ -44,8 +44,8 @@ CATALOGO_ROPA = [
         "precio_viejo": None,
         "imagen": "https://ciarene.up.railway.app/fotos/sudadera.png",
         "categoria": "Deportivo",
-        "tallas": [""],
-        "colores": ["Gris", "Verde"]
+        "tallas": ["Única"],
+        "colores": ["Rojo", "Negro"]
     },
     {
         "id": 3,
@@ -91,4 +91,5 @@ if __name__ == '__main__':
     # Railway usa la variable de entorno PORT
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
 
