@@ -200,6 +200,46 @@
         <i class="fas fa-shopping-bag"></i>
         <span class="cart-count" id="cart-count">0</span>
     </div>
+    <div id="modal-producto" class="modal">
+    <div class="modal-content animate__animated animate__zoomIn">
+        <span class="close-modal" onclick="cerrarModal()">&times;</span>
+        
+        <div id="detalle-foto-container">
+            <img id="modal-imagen" src="" alt="Producto">
+        </div>
+        
+        <div class="modal-info">
+            <h2 id="modal-nombre"></h2>
+            <p id="modal-precio" class="precio-grande"></p>
+            
+            <div class="detalles-seleccion">
+                <label>Talla:</label>
+                <select id="modal-talla">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select>
+
+                <label>Color:</label>
+                <div class="opciones-color">
+                    <span class="color-dot" style="background: black;" onclick="seleccionarColor(this)"></span>
+                    <span class="color-dot" style="background: pink;" onclick="seleccionarColor(this)"></span>
+                    <span class="color-dot" style="background: white; border: 1px solid #ccc;" onclick="seleccionarColor(this)"></span>
+                </div>
+            </div>
+
+            <p class="descripcion-texto">
+                Material de alta calidad, cómodo y perfecto para cualquier ocasión. 
+                Envío disponible a todo el país.
+            </p>
+
+            <button class="btn-añadir-modal" onclick="añadirDesdeModal()">
+                Añadir al Carrito
+            </button>
+        </div>
+    </div>
+</div>
 
     <script>
         // Busca esta línea en tu index.html y cámbiala así:
@@ -256,6 +296,7 @@ const API_URL = "https://ciarene.up.railway.app/api/productos";
 </body>
 
 </html>
+
 
 
 
