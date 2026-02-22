@@ -3,11 +3,12 @@ import os
 
 app = Flask(__name__, static_folder='.')
 
+# Catálogo optimizado con tus archivos reales
 CATALOGO = [
-    {"id": 1, "nombre": "Camiseta Ciarené", "precio": 45000, "imagen": "camisetas.png"},
-    {"id": 2, "nombre": "Pantalón Premium", "precio": 85000, "imagen": "pantalon.png"},
-    {"id": 3, "nombre": "Pijama Seda", "precio": 65000, "imagen": "pijama.png"},
-    {"id": 4, "nombre": "Sudadera Sport", "precio": 75000, "imagen": "sudadera.png"}
+    {"id": 1, "nombre": "Colección Camisetas", "precio": 45000, "imagen": "camisetas.png", "desc": "Algodón premium 100%"},
+    {"id": 2, "nombre": "Pantalón Elegance", "precio": 85000, "imagen": "pantalon.png", "desc": "Corte estilizado y cómodo"},
+    {"id": 3, "nombre": "Pijama Dreamer", "precio": 65000, "imagen": "pijama.png", "desc": "Seda fría para el mejor descanso"},
+    {"id": 4, "nombre": "Sudadera Urban", "precio": 75000, "imagen": "sudadera.png", "desc": "Estilo deportivo y moderno"}
 ]
 
 @app.route('/')
@@ -25,4 +26,3 @@ def api_productos():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
-
