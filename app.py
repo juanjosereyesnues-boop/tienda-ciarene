@@ -2,37 +2,35 @@ from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 
-# Agregamos static_folder='.' para que Flask sepa buscar el HTML en la raíz
 app = Flask(__name__, static_folder='.')
 CORS(app)
 
-# Configuración de carpetas
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARPETA_FOTOS = os.path.join(BASE_DIR, 'imagenes')
 
-# --- ESTO ES LO QUE SOLUCIONA EL ERROR 404 EN RAILWAY ---
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
+
 @app.route('/carrito.html')
 def carrito():
     return send_from_directory('.', 'carrito.html')
-# -------------------------------------------------------
 
-# Servir imágenes locales de forma profesional
 @app.route('/fotos/<path:filename>')
 def servir_foto(filename):
     return send_from_directory(CARPETA_FOTOS, filename)
 
-# Catálogo con sistema de ofertas para Ciarené
+# Catálogo actualizado con Tallas y Colores
 CATALOGO_ROPA = [
     {
         "id": 1,
         "nombre": "Pijama Satin",
         "precio": 50000,
         "precio_viejo": 85000,
-        "imagen": "https://ciarene.up.railway.app/fotos/pijama.png", # URL pública
-        "categoria": "Pijamas"
+        "imagen": "https://ciarene.up.railway.app/fotos/pijama.png",
+        "categoria": "Pijamas",
+        "tallas": ["S", "M", "L"],
+        "colores": ["Rosado", "Negro", "Azul"]
     },
     {
         "id": 2,
@@ -40,7 +38,9 @@ CATALOGO_ROPA = [
         "precio": 65000,
         "precio_viejo": None,
         "imagen": "https://ciarene.up.railway.app/fotos/sudadera.png",
-        "categoria": "Deportivo"
+        "categoria": "Deportivo",
+        "tallas": ["M", "L", "XL"],
+        "colores": ["Gris", "Verde"]
     },
     {
         "id": 3,
@@ -48,7 +48,9 @@ CATALOGO_ROPA = [
         "precio": 30000,
         "precio_viejo": 48000,
         "imagen": "https://ciarene.up.railway.app/fotos/camisetas.png",
-        "categoria": "Camisas"
+        "categoria": "Camisas",
+        "tallas": ["S", "M", "L", "XL"],
+        "colores": ["Blanco", "Negro", "Rojo"]
     },
     {
         "id": 4,
@@ -56,7 +58,9 @@ CATALOGO_ROPA = [
         "precio": 85000,
         "precio_viejo": 105000,
         "imagen": "https://ciarene.up.railway.app/fotos/pantalon.png",
-        "categoria": "Pantalones"
+        "categoria": "Pantalones",
+        "tallas": ["6", "8", "10", "12"],
+        "colores": ["Azul Oscuro", "Negro"]
     },
     {
         "id": 5,
@@ -64,7 +68,9 @@ CATALOGO_ROPA = [
         "precio": 35000,
         "precio_viejo": None,
         "imagen": "https://ciarene.up.railway.app/fotos/pijama2.jpeg",
-        "categoria": "Pantalones"
+        "categoria": "Pijamas",
+        "tallas": ["Única"],
+        "colores": ["Estampado"]
     }
 ]
 
@@ -79,8 +85,3 @@ def get_productos():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
-
-
-
-
-
