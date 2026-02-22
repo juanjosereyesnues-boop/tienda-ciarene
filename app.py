@@ -5,10 +5,10 @@ app = Flask(__name__, static_folder='.')
 
 # Catálogo con tus archivos locales de la barra lateral
 CATALOGO = [
-    {"id": 1, "nombre": "Camiseta Ciarené", "precio": 45000, "precio_antes":62000, "imagen": "camisetas.png", "categoria": "TOP"},
-    {"id": 2, "nombre": "Pantalón Premium", "precio": 85000, "imagen": "pantalon.png", "categoria": "GALA"},
-    {"id": 3, "nombre": "Pijama Seda", "precio": 65000, "imagen": "pijama.png", "categoria": "RELAX"},
-    {"id": 4, "nombre": "Sudadera Sport", "precio": 75000, "imagen": "sudadera.png", "categoria": "URBAN"}
+    {"id": 1, "nombre": "Camiseta Ciarené", "precio": 45000, "precio_antes":62000, "imagen": "camisetas.png", "categoria": "Camisas"},
+    {"id": 2, "nombre": "Pantalón Premium", "precio": 85000, "imagen": "pantalon.png", "categoria": "Pantalones"},
+    {"id": 3, "nombre": "Pijama Seda", "precio": 65000, "imagen": "pijama.png", "categoria": "Casual"},
+    {"id": 4, "nombre": "Sudadera Sport", "precio": 75000, "imagen": "sudadera.png", "categoria": "Deportivo"}
 ]
 
 @app.route('/')
@@ -31,4 +31,5 @@ def send_report(path):
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
 
