@@ -89,3 +89,24 @@ def get_productos():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
+    # Un diccionario para guardar los carritos de cada persona
+# En programación, esto se llama "Persistencia de datos"
+CARRITOS_GUARDADOS = {}
+
+@app.route('/api/guardar_carrito', methods=['POST'])
+def guardar_carrito():
+    from flask import request
+    datos = request.json
+    usuario = datos.get('usuario')
+    productos = datos.get('productos') # Aquí vienen con talla y color
+    
+    # Guardamos en la "memoria" del servidor
+    CARRITOS_GUARDADOS[usuario] = productos
+    
+    return jsonify({"status": "success", "message": "Carrito guardado en la nube"})
+
+@app.route('/api/recuperar_carrito/<usuario>', methods=['GET'])
+def recuperar_carrito(usuario):
+    carrito = CARRITOS_GUARDADOS.get(usuario, [])
+    return jsonify({"status": "success", "data": carrito})
+
