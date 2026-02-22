@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ciarené Boutique</title>
+    <title>Ciarené Boutique | Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -12,7 +12,7 @@
         body { font-family: 'Outfit', sans-serif; margin: 0; background: #fff5f7; }
         header { background: white; padding: 15px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 40px 8%; }
-        .card { background: white; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.4s; cursor: pointer; }
+        .card { background: white; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.4s; }
         .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(255, 77, 109, 0.2); }
         .card img { width: 100%; height: 350px; object-fit: cover; }
         .info { padding: 20px; text-align: center; }
@@ -21,9 +21,9 @@
     </style>
 </head>
 <body>
-    <header class="animate__animated animate__fadeInDown">
-        <h1 style="color:var(--p); margin:0; letter-spacing:-1px;">CIARENÉ</h1>
-        <a href="/carrito" style="text-decoration:none; font-size:1.6rem;">🛒 <span id="count" style="background:var(--p); color:white; padding:2px 10px; border-radius:50%; font-size:1rem;">0</span></a>
+    <header>
+        <h1 style="color:var(--p); margin:0;">CIARENÉ</h1>
+        <a href="/carrito" style="text-decoration:none; font-size:1.6rem;">🛒 <span id="count">0</span></a>
     </header>
 
     <div class="grid" id="lista"></div>
@@ -33,18 +33,20 @@
         let cart = JSON.parse(localStorage.getItem('cart_ciarene')) || [];
 
         async function load() {
-            const res = await fetch('/api/productos');
-            prods = await res.json();
-            document.getElementById('lista').innerHTML = prods.map((p, i) => `
-                <div class="card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s">
-                    <img src="${p.imagen}">
-                    <div class="info">
-                        <h3>${p.nombre}</h3>
-                        <p style="color:var(--p); font-weight:900; font-size:1.4rem;">$${p.precio.toLocaleString()}</p>
-                        <button class="btn" onclick="add(${p.id})">Añadir al Carrito</button>
-                    </div>
-                </div>`).join('');
-            document.getElementById('count').innerText = cart.length;
+            try {
+                const res = await fetch('/api/productos');
+                prods = await res.json();
+                document.getElementById('lista').innerHTML = prods.map(p => `
+                    <div class="card animate__animated animate__fadeInUp">
+                        <img src="${p.imagen}">
+                        <div class="info">
+                            <h3>${p.nombre}</h3>
+                            <p style="color:var(--p); font-weight:900;">$${p.precio.toLocaleString()}</p>
+                            <button class="btn" onclick="add(${p.id})">Agregar</button>
+                        </div>
+                    </div>`).join('');
+                document.getElementById('count').innerText = cart.length;
+            } catch (e) { console.error("Error cargando productos"); }
         }
 
         function add(id) {
