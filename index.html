@@ -3,130 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ciarené Shop</title>
+    <title>Ciarené - Colección</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        :root { --pink: #ff4d6d; --dark: #2d3436; --light: #f9f9f9; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--light); }
+        :root { --pink: #ff4d6d; --dark: #2d3436; --bg: #f8f9fa; --gray: #8395a7; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--bg); color: var(--dark); }
         
-        /* HEADER PREMIUM */
-        .header { 
-            background: white; padding: 15px 6%; display: flex; 
+        /* 1. HEADER Y MENÚ SUPERIOR DE LUJO */
+        .header-top { 
+            background: white; padding: 15px 5%; display: flex; 
             justify-content: space-between; align-items: center; 
-            position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
         }
-        .logo { font-size: 1.8rem; font-weight: 700; color: var(--pink); margin: 0; }
-        .nav-icons { display: flex; align-items: center; gap: 20px; }
-        .cart-btn { position: relative; color: var(--dark); text-decoration: none; font-size: 1.4rem; }
+        .logo-box h1 { margin: 0; font-size: 1.8rem; color: var(--pink); font-weight: 700; letter-spacing: -1px; }
+        .logo-box p { margin: 0; font-size: 0.75rem; color: var(--gray); }
+        
+        .header-actions { display: flex; align-items: center; gap: 20px; }
+        .cart-icon { position: relative; font-size: 1.4rem; color: var(--dark); text-decoration: none; }
         .badge { 
-            position: absolute; top: -8px; right: -10px; background: var(--pink); 
-            color: white; font-size: 0.7rem; padding: 3px 7px; border-radius: 50%; 
+            position: absolute; top: -5px; right: -8px; background: var(--pink); 
+            color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 50%; font-weight: bold;
         }
+        .logout-btn { color: #c8d6e5; cursor: pointer; transition: 0.3s; font-size: 1.2rem; }
+        .logout-btn:hover { color: var(--pink); }
 
-        /* GRID DE PRODUCTOS */
-        .container { padding: 30px 6%; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        /* 2. BARRA DE CATEGORÍAS DESLIZABLE */
+        .categories-bar {
+            background: white; padding: 10px 5%; display: flex; gap: 10px;
+            overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid #eee;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .categories-bar::-webkit-scrollbar { display: none; }
+        .cat-btn {
+            padding: 8px 20px; border-radius: 50px; border: 1px solid #eee;
+            background: white; color: var(--gray); font-family: 'Poppins'; 
+            font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.3s;
+        }
+        .cat-btn.active { background: var(--dark); color: white; border-color: var(--dark); }
+
+        /* 3. TARJETAS DE PRODUCTOS PROFESIONALES */
+        .grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
+            gap: 25px; padding: 30px 5%; 
+        }
         .card { 
-            background: white; border-radius: 25px; overflow: hidden; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: 0.3s; cursor: pointer; position: relative;
+            background: white; border-radius: 20px; overflow: hidden; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04); transition: transform 0.3s, box-shadow 0.3s; 
+            display: flex; flex-direction: column; cursor: pointer;
         }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 380px; object-fit: cover; }
-        .card-info { padding: 20px; text-align: center; }
-        .card-info h3 { margin: 0; font-size: 1.1rem; color: var(--dark); }
-        .price { color: var(--pink); font-weight: 700; font-size: 1.2rem; margin-top: 8px; display: block; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        
+        .img-container { position: relative; height: 320px; overflow: hidden; background: #f0f0f0; }
+        .img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .card:hover .img-container img { transform: scale(1.05); }
+        
+        .tag-oferta { 
+            position: absolute; top: 15px; left: 15px; background: #ff4757; 
+            color: white; font-size: 0.7rem; font-weight: bold; padding: 5px 12px; 
+            border-radius: 50px; letter-spacing: 1px;
+        }
 
-        /* MODAL TEMU STYLE */
-        .modal { 
-            display: none; position: fixed; z-index: 2000; left: 0; top: 0; 
-            width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); 
+        .card-info { padding: 20px; position: relative; }
+        .cat-label { font-size: 0.7rem; color: var(--gray); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 5px; }
+        .card-info h3 { margin: 0 0 10px; font-size: 1.1rem; color: var(--dark); line-height: 1.3; }
+        
+        .price-box { display: flex; align-items: center; gap: 10px; }
+        .price-new { color: var(--pink); font-weight: 700; font-size: 1.3rem; }
+        .price-old { color: #c8d6e5; text-decoration: line-through; font-size: 0.9rem; }
+
+        .btn-quick-add {
+            position: absolute; right: 20px; bottom: 20px; background: var(--dark);
+            color: white; width: 40px; height: 40px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            border: none; cursor: pointer; transition: 0.3s;
         }
-        .modal-content { 
-            background: white; margin: 2% auto; width: 90%; max-width: 450px; 
-            border-radius: 30px; overflow: hidden; animation: fadeInUp 0.4s;
-        }
-        .m-body { padding: 25px; }
+        .card:hover .btn-quick-add { background: var(--pink); transform: rotate(90deg); }
+
+        /* MODAL TEMU STYLE (Sin cambios grandes, solo pulido) */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
+        .modal-content { background: white; margin: 5% auto; width: 90%; max-width: 420px; border-radius: 30px; overflow: hidden; animation: zoomIn 0.3s; }
         .m-img { width: 100%; height: 350px; object-fit: cover; }
-        .m-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
-        .m-price { font-size: 1.8rem; color: var(--pink); font-weight: 700; margin: 10px 0; }
-        label { font-weight: 600; font-size: 0.9rem; display: block; margin: 15px 0 5px; color: #555; }
-        select { 
-            width: 100%; padding: 12px; border-radius: 12px; border: 1.5px solid #eee; 
-            font-family: 'Poppins'; background: #fdfdfd; 
-        }
-        .btn-add { 
-            width: 100%; padding: 18px; background: var(--pink); color: white; 
-            border: none; border-radius: 50px; font-weight: 700; font-size: 1.1rem; 
-            margin-top: 25px; cursor: pointer; transition: 0.3s;
-        }
-        .btn-add:hover { background: #e63958; transform: scale(1.02); }
-        .close { float: right; cursor: pointer; font-size: 1.5rem; color: #aaa; }
+        .m-body { padding: 30px; }
+        .m-title { font-size: 1.5rem; font-weight: 700; margin: 0 0 5px; }
+        .m-price { font-size: 1.6rem; color: var(--pink); font-weight: 700; margin: 10px 0 20px; }
+        label { font-size: 0.85rem; color: var(--gray); font-weight: 600; display: block; margin-bottom: 8px; }
+        select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e1e1e1; font-family: 'Poppins'; margin-bottom: 20px; background: #fafafa; }
+        .btn-add { width: 100%; padding: 16px; background: var(--pink); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
+        .close { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5); cursor: pointer; z-index: 10; }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <h1 class="logo">Ciarené</h1>
-        <div class="nav-icons">
-            <span id="user-display" style="font-size: 0.8rem; color: #777;"></span>
-            <a href="carrito.html" class="cart-btn">
+    <header class="header-top">
+        <div class="logo-box">
+            <h1>Ciarené</h1>
+            <p id="user-display">Bienvenida</p>
+        </div>
+        <div class="header-actions">
+            <a href="carrito.html" class="cart-icon">
                 <i class="fas fa-shopping-bag"></i>
                 <span id="count" class="badge">0</span>
             </a>
-            <i class="fas fa-sign-out-alt" onclick="logout()" style="cursor:pointer; color:#aaa"></i>
+            <i class="fas fa-sign-out-alt logout-btn" onclick="logout()" title="Cerrar sesión"></i>
         </div>
     </header>
 
-    <div class="container" id="productos"></div>
+    <div class="categories-bar" id="cat-container">
+        <button class="cat-btn active" onclick="filtrar('Todos')">Todo</button>
+        <button class="cat-btn" onclick="filtrar('Pijamas')">Pijamas</button>
+        <button class="cat-btn" onclick="filtrar('Deportivo')">Deportivo</button>
+        <button class="cat-btn" onclick="filtrar('Camisas')">Camisas</button>
+        <button class="cat-btn" onclick="filtrar('Pantalones')">Pantalones</button>
+    </div>
+
+    <div class="grid" id="productos">
+        </div>
 
     <div id="modal-producto" class="modal">
         <div class="modal-content">
-            <img id="m-img" class="m-img" src="">
-            <div class="m-body">
+            <div style="position: relative;">
                 <span class="close" onclick="cerrar()">&times;</span>
+                <img id="m-img" class="m-img" src="">
+            </div>
+            <div class="m-body">
                 <h2 id="m-nom" class="m-title"></h2>
-                <p id="m-desc" style="color:#777; font-size:0.9rem"></p>
+                <p id="m-desc" style="color:var(--gray); font-size:0.9rem; margin-top:0;"></p>
                 <div id="m-pre" class="m-price"></div>
                 
-                <label>Elige tu Talla:</label>
+                <label>Selecciona tu Talla:</label>
                 <select id="m-talla"></select>
                 
-                <label>Elige tu Color:</label>
+                <label>Selecciona el Color:</label>
                 <select id="m-color"></select>
 
-                <button class="btn-add" onclick="añadir()">Añadir al Carrito ✨</button>
+                <button class="btn-add" onclick="añadir()"><i class="fas fa-cart-plus"></i> Agregar al carrito</button>
             </div>
         </div>
     </div>
 
     <script>
-        // SEGURIDAD
+        // 1. SEGURIDAD BÁSICA
         const user = localStorage.getItem('usuario_ciarene');
         if(!user) window.location.href = "/";
-        document.getElementById('user-display').innerText = `Hola, ${user.split('@')[0]}`;
+        document.getElementById('user-display').innerText = `Hola, ${user.split('@')[0]} ✨`;
 
         let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
+        let productosGlobales = []; // Guarda todos los productos para poder filtrar
         let pSel = null;
 
+        // 2. CARGAR DESDE LA API
         async function cargar() {
             try {
                 const res = await fetch('/api/productos');
                 const json = await res.json();
-                const cont = document.getElementById('productos');
-                cont.innerHTML = '';
-                json.data.forEach((p, i) => {
-                    const div = document.createElement('div');
-                    div.className = 'card animate__animated fadeInUp';
-                    div.style.animationDelay = `${i*0.1}s`;
-                    div.onclick = () => abrir(p);
-                    div.innerHTML = `<img src="${p.imagen}"><div class="card-info"><h3>${p.nombre}</h3><span class="price">$${p.precio.toLocaleString()}</span></div>`;
-                    cont.appendChild(div);
-                });
+                productosGlobales = json.data;
+                renderizar(productosGlobales);
                 actualizar();
-            } catch (e) { console.error("Error cargando productos"); }
+            } catch (e) { console.error("Error al cargar"); }
         }
 
+        // 3. PINTAR LAS TARJETAS (NUEVO DISEÑO)
+        function renderizar(lista) {
+            const cont = document.getElementById('productos');
+            cont.innerHTML = '';
+            
+            if(lista.length === 0) {
+                cont.innerHTML = '<p style="text-align:center; width:100%; color:#888;">No hay productos en esta categoría.</p>';
+                return;
+            }
+
+            lista.forEach((p, i) => {
+                const div = document.createElement('div');
+                div.className = 'card animate__animated animate__fadeInUp';
+                div.style.animationDelay = `${i * 0.1}s`;
+                div.onclick = () => abrir(p);
+                
+                const tieneOferta = p.precio_viejo ? `<span class="tag-oferta">OFERTA</span>` : '';
+                const precioViejoHTML = p.precio_viejo ? `<span class="price-old">$${p.precio_viejo.toLocaleString()}</span>` : '';
+
+                div.innerHTML = `
+                    <div class="img-container">
+                        ${tieneOferta}
+                        <img src="${p.imagen}">
+                    </div>
+                    <div class="card-info">
+                        <span class="cat-label">${p.categoria || 'Colección'}</span>
+                        <h3>${p.nombre}</h3>
+                        <div class="price-box">
+                            <span class="price-new">$${p.precio.toLocaleString()}</span>
+                            ${precioViejoHTML}
+                        </div>
+                        <button class="btn-quick-add"><i class="fas fa-plus"></i></button>
+                    </div>
+                `;
+                cont.appendChild(div);
+            });
+        }
+
+        // 4. LÓGICA DEL MENÚ DE CATEGORÍAS
+        function filtrar(categoria) {
+            // Pintar botones
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filtrar productos
+            if(categoria === 'Todos') {
+                renderizar(productosGlobales);
+            } else {
+                const filtrados = productosGlobales.filter(p => p.categoria === categoria);
+                renderizar(filtrados);
+            }
+        }
+
+        // 5. FUNCIONES DEL MODAL Y CARRITO
         function abrir(p) {
             pSel = p;
             document.getElementById('m-img').src = p.imagen;
@@ -136,7 +226,7 @@
             document.getElementById('m-talla').innerHTML = p.tallas.map(t=>`<option>${t}</option>`).join('');
             document.getElementById('m-color').innerHTML = p.colores.map(c=>`<option>${c}</option>`).join('');
             document.getElementById('modal-producto').style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden'; // Bloquea el fondo
         }
 
         function cerrar() { 
@@ -151,13 +241,20 @@
             localStorage.setItem('carrito_ciarene', JSON.stringify(carrito));
             actualizar();
             cerrar();
+            
+            // Efecto de rebote en el carrito
+            const count = document.getElementById('count');
+            count.classList.add('animate__animated', 'animate__rubberBand');
+            setTimeout(() => count.classList.remove('animate__rubberBand'), 1000);
         }
 
         function actualizar() { document.getElementById('count').innerText = carrito.length; }
         
         function logout() {
-            localStorage.removeItem('usuario_ciarene');
-            window.location.href = "/";
+            if(confirm("¿Seguro que quieres cerrar sesión?")) {
+                localStorage.removeItem('usuario_ciarene');
+                window.location.href = "/";
+            }
         }
 
         window.onclick = (e) => { if(e.target.className == 'modal') cerrar(); }
