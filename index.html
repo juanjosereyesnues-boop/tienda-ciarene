@@ -1,60 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ciarené Boutique</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body { font-family: 'Poppins', sans-serif; margin: 0; background: #f9f9f9; }
-        header { background: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 10; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px; }
-        .card { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .card img { width: 100%; height: 300px; object-fit: cover; }
-        .info { padding: 15px; text-align: center; }
-        .btn { background: #ff4d6d; color: #fff; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; }
+        :root { --p: #ff4d6d; --d: #1a1a1a; }
+        body { font-family: 'Outfit', sans-serif; margin: 0; background: #fff5f7; }
+        
+        /* HEADER */
+        header { background: white; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .logo { font-size: 2rem; font-weight: 900; color: var(--d); }
+        .logo span { color: var(--p); }
+        
+        /* TIENDA */
+        #vista-tienda, #vista-carrito { padding: 40px 5%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: white; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.3s; }
+        .card:hover { transform: translateY(-10px); }
+        .card img { width: 100%; height: 350px; object-fit: cover; }
+        .info { padding: 20px; text-align: center; }
+        .btn { background: var(--d); color: white; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: var(--p); }
+
+        /* CARRITO */
+        #vista-carrito { display: none; max-width: 600px; margin: auto; }
+        .cart-card { background: white; padding: 30px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .btn-wa { background: #25D366; color: white; border: none; padding: 20px; width: 100%; border-radius: 50px; font-weight: 900; font-size: 1.2rem; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
+
     <header>
-        <h1 style="color:#ff4d6d; margin:0">Ciarené</h1>
-        <a href="/carrito" style="color:#333; text-decoration:none; font-size:1.5rem">
-            <i class="fas fa-shopping-bag"></i> <span id="count">0</span>
-        </a>
+        <div class="logo">CIARE<span>NÉ</span></div>
+        <button onclick="cambiarVista()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">
+            🛒 <span id="badge" style="background:var(--p); color:white; padding:2px 8px; border-radius:50%; font-size:1rem;">0</span>
+        </button>
     </header>
 
-    <div class="grid" id="lista"></div>
+    <div id="vista-tienda" class="animate__animated animate__fadeIn">
+        <h1 style="text-align:center;">Nueva Colección ✨</h1>
+        <div class="grid" id="lista-productos"></div>
+    </div>
+
+    <div id="vista-carrito" class="animate__animated animate__fadeIn">
+        <div class="cart-card">
+            <h1>Tu Pedido 🌸</h1>
+            <div id="lista-carrito"></div>
+            <h2 id="total" style="text-align:right; margin-top:20px;"></h2>
+            <button class="btn-wa" onclick="enviarWA()">Enviar a WhatsApp</button>
+            <button onclick="cambiarVista()" style="width:100%; background:none; border:none; margin-top:10px; color:#aaa; cursor:pointer;">← Volver a la tienda</button>
+        </div>
+    </div>
 
     <script>
-        let productos = [];
-        let carrito = JSON.parse(localStorage.getItem('cart')) || [];
+        let prods = [];
+        let cart = [];
 
         async function cargar() {
-            const res = await fetch('/api/productos');
-            productos = await res.json();
-            const div = document.getElementById('lista');
-            div.innerHTML = productos.map(p => `
-                <div class="card">
+            try {
+                const res = await fetch('/api/productos');
+                prods = await res.json();
+                render();
+            } catch (e) { alert("Error conectando con el servidor"); }
+        }
+
+        function render() {
+            const cont = document.getElementById('lista-productos');
+            cont.innerHTML = prods.map(p => `
+                <div class="card animate__animated animate__zoomIn">
                     <img src="${p.imagen}">
                     <div class="info">
                         <h3>${p.nombre}</h3>
-                        <p style="color:#ff4d6d; font-weight:bold">$${p.precio.toLocaleString()}</p>
-                        <button class="btn" onclick="agregar(${p.id})">Añadir al carrito</button>
+                        <p style="color:var(--p); font-weight:900; font-size:1.5rem;">$${p.precio.toLocaleString()}</p>
+                        <button class="btn" onclick="agregar(${p.id})">Añadir al Carrito</button>
                     </div>
                 </div>
             `).join('');
-            document.getElementById('count').innerText = carrito.length;
         }
 
         function agregar(id) {
-            const p = productos.find(item => item.id === id);
-            carrito.push(p);
-            localStorage.setItem('cart', JSON.stringify(carrito));
-            document.getElementById('count').innerText = carrito.length;
-            alert("¡Añadido! ✨");
+            const p = prods.find(x => x.id === id);
+            cart.push(p);
+            document.getElementById('badge').innerText = cart.length;
+            // Pequeña animación de confeti o alerta
         }
+
+        function cambiarVista() {
+            const tienda = document.getElementById('vista-tienda');
+            const carrito = document.getElementById('vista-carrito');
+            if(tienda.style.display === "none") {
+                tienda.style.display = "block";
+                carrito.style.display = "none";
+            } else {
+                tienda.style.display = "none";
+                carrito.style.display = "block";
+                renderCart();
+            }
+        }
+
+        function renderCart() {
+            const cont = document.getElementById('lista-carrito');
+            let t = 0;
+            cont.innerHTML = cart.map((p, i) => {
+                t += p.precio;
+                return `<div class="item"><span>${p.nombre}</span> <b>$${p.precio.toLocaleString()}</b></div>`;
+            }).join('');
+            document.getElementById('total').innerText = "Total: $" + t.toLocaleString();
+        }
+
+        function enviarWA() {
+            const msg = encodeURIComponent("¡Hola! Quiero pedir:\n" + cart.map(p => "- " + p.nombre).join("\n") + "\n\nTotal: " + document.getElementById('total').innerText);
+            window.location.href = "https://wa.me/573000000000?text=" + msg;
+        }
+
         cargar();
     </script>
 </body>
