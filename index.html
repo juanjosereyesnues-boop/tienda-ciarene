@@ -314,60 +314,99 @@
 </div>
 
     <script>
-        // Busca esta línea en tu index.html y cámbiala así:
-const API_URL = "https://ciarene.up.railway.app/api/productos";
-        let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
+    const API_URL = "https://ciarene.up.railway.app/api/productos";
+    let carrito = JSON.parse(localStorage.getItem('carrito_ciarene')) || [];
+    let productoSeleccionado = null; // Para el modal
 
-        async function cargarProductos() {
-            try {
-                const res = await fetch(API_URL);
-                const json = await res.json();
-                const container = document.getElementById('productos');
-                container.innerHTML = '';
+    async function cargarProductos() {
+        try {
+            const res = await fetch(API_URL);
+            const json = await res.json();
+            const container = document.getElementById('productos');
+            container.innerHTML = '';
 
-                json.data.forEach((p, i) => {
-                    const tieneOferta = p.precio_viejo != null;
-                    container.innerHTML += `
-                        <div class="card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s">
-                            ${tieneOferta ? '<div class="badge-oferta">OFERTA 💰</div>' : ''}
-                            <img src="${p.imagen}" onerror="this.src='https://via.placeholder.com/350x450?text=Ciarené+Moda'">
-                            <div class="card-info">
-                                <h3>${p.nombre}</h3>
-                                <div>
-                                    ${tieneOferta ? `<span class="precio-viejo">$${p.precio_viejo.toLocaleString()}</span>` : ''}
-                                    <span class="precio-actual">$${p.precio.toLocaleString()}</span>
-                                </div>
-                                <button class="btn-add" onclick="agregar('${p.nombre}', ${p.precio})">
-                                    <i class="fas fa-plus"></i> Añadir
-                                </button>
+            json.data.forEach((p, i) => {
+                const tieneOferta = p.precio_viejo != null;
+                // Convertimos el objeto a texto para el modal
+                const pString = JSON.stringify(p).replace(/"/g, '&quot;');
+                
+                container.innerHTML += `
+                    <div class="card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s" onclick="abrirModal(${pString})">
+                        ${tieneOferta ? '<div class="badge-oferta">OFERTA 💰</div>' : ''}
+                        <img src="${p.imagen}" onerror="this.src='https://via.placeholder.com/350x450?text=Ciarené+Moda'">
+                        <div class="card-info">
+                            <h3>${p.nombre}</h3>
+                            <div>
+                                ${tieneOferta ? `<span class="precio-viejo">$${p.precio_viejo.toLocaleString()}</span>` : ''}
+                                <span class="precio-actual">$${p.precio.toLocaleString()}</span>
                             </div>
+                            <button class="btn-add" onclick="event.stopPropagation(); abrirModal(${pString})">
+                                <i class="fas fa-plus"></i> Ver Detalles
+                            </button>
                         </div>
-                    `;
-                });
-                actualizarContador();
-            } catch (e) {
-                document.getElementById('productos').innerHTML = "Se A Producio Un Error, Estamos En Ello";
-            }
-        }
-
-        function agregar(n, p) {
-            carrito.push({ nombre: n, precio: p });
-            localStorage.setItem('carrito_ciarene', JSON.stringify(carrito));
+                    </div>
+                `;
+            });
             actualizarContador();
-            // Animación pequeña al botón
-            event.target.innerHTML = "¡Añadido!";
-            setTimeout(() => { event.target.innerHTML = '<i class="fas fa-plus"></i> Añadir'; }, 1000);
+        } catch (e) {
+            document.getElementById('productos').innerHTML = "Se A Producio Un Error, Estamos En Ello";
         }
+    }
 
-        function actualizarContador() {
-            document.getElementById('cart-count').innerText = carrito.length;
+    // --- NUEVAS FUNCIONES PARA EL MODAL ---
+    function abrirModal(p) {
+        productoSeleccionado = p;
+        document.getElementById('modal-imagen').src = p.imagen;
+        document.getElementById('modal-nombre').innerText = p.nombre;
+        document.getElementById('modal-precio').innerText = `$${p.precio.toLocaleString()}`;
+        document.getElementById('modal-producto').style.display = "block";
+        document.body.style.overflow = "hidden";
+    }
+
+    function cerrarModal() {
+        document.getElementById('modal-producto').style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+
+    function añadirDesdeModal() {
+        const talla = document.getElementById('modal-talla').value;
+        // Llamamos a tu función agregar original pero sumando la talla
+        agregar(`${productoSeleccionado.nombre} (Talla: ${talla})`, productoSeleccionado.precio);
+        cerrarModal();
+    }
+
+    // Cerramos el modal si hacen clic fuera
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('modal-producto')) {
+            cerrarModal();
         }
+    }
 
-        window.onload = cargarProductos;
-    </script>
+    // --- TUS FUNCIONES ORIGINALES (SIN DAÑAR NADA) ---
+    function agregar(n, p) {
+        carrito.push({ nombre: n, precio: p });
+        localStorage.setItem('carrito_ciarene', JSON.stringify(carrito));
+        actualizarContador();
+        
+        // Verificamos si el evento existe (por si viene del botón de la card)
+        if(window.event && window.event.target && window.event.target.classList.contains('btn-add')) {
+            const btn = window.event.target;
+            btn.innerHTML = "¡Añadido!";
+            setTimeout(() => { btn.innerHTML = '<i class="fas fa-plus"></i> Añadir'; }, 1000);
+        }
+    }
+
+    function actualizarContador() {
+        const countEl = document.getElementById('cart-count');
+        if(countEl) countEl.innerText = carrito.length;
+    }
+
+    window.onload = cargarProductos;
+</script>
 </body>
 
 </html>
+
 
 
 
