@@ -1,1 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenida a Ciarené</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root { --primary: #ff4d6d; --bg: #fdfcfb; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0;
+        }
+        .login-card {
+            background: white; padding: 40px; border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            width: 100%; max-width: 350px; text-align: center;
+        }
+        .logo { color: var(--primary); font-size: 2rem; font-weight: bold; margin-bottom: 10px; }
+        h2 { font-size: 1.2rem; color: #555; margin-bottom: 30px; }
+        input {
+            width: 100%; padding: 15px; margin: 10px 0;
+            border-radius: 50px; border: 1px solid #eee;
+            background: #f9f9f9; box-sizing: border-box; font-family: 'Poppins';
+        }
+        input:focus { outline: none; border-color: var(--primary); background: white; }
+        .btn-login {
+            background: var(--primary); color: white; border: none;
+            width: 100%; padding: 15px; border-radius: 50px;
+            font-size: 1.1rem; font-weight: 600; cursor: pointer;
+            margin-top: 20px; transition: 0.3s;
+        }
+        .btn-login:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,77,109,0.3); }
+        .switch { margin-top: 20px; font-size: 0.9rem; color: #888; }
+        .switch a { color: var(--primary); text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
 
+    <div class="login-card animate__animated animate__zoomIn">
+        <div class="logo">Ciarené</div>
+        <h2 id="titulo">¡Qué alegría verte! ✨</h2>
+        
+        <input type="text" id="user-email" placeholder="Correo Electrónico">
+        <input type="password" id="user-pass" placeholder="Contraseña">
+        
+        <button class="btn-login" onclick="procesar()">Entrar a la Tienda</button>
+
+        <div class="switch">
+            <span id="texto-cambio">¿Eres nueva?</span> 
+            <a href="javascript:void(0)" onclick="cambiarModo()" id="link-modo">Crear cuenta</a>
+        </div>
+    </div>
+
+    <script>
+        let esRegistro = false;
+
+        function cambiarModo() {
+            esRegistro = !esRegistro;
+            document.getElementById('titulo').innerText = esRegistro ? "Crea tu cuenta VIP 🌸" : "¡Qué alegría verte! ✨";
+            document.getElementById('link-modo').innerText = esRegistro ? "Ya tengo cuenta" : "Crear cuenta";
+            document.getElementById('texto-cambio').innerText = esRegistro ? "¿Ya eres clienta?" : "¿Eres nueva?";
+        }
+
+        async function procesar() {
+            const email = document.getElementById('user-email').value;
+            const pass = document.getElementById('user-pass').value;
+
+            if(!email || !pass) return alert("Por favor completa los datos");
+
+            // Guardamos el usuario en el navegador por ahora
+            localStorage.setItem('usuario_ciarene', email);
+            
+            // Simulación de éxito por ahora para que puedas verlo
+            alert(esRegistro ? "¡Cuenta creada con éxito!" : "¡Bienvenida de nuevo!");
+            window.location.href = "index.html"; 
+        }
+    </script>
+</body>
+</html>
