@@ -44,6 +44,30 @@ CATALOGO = [
         "precio_antes": 60000,
         "imagen": "estilo.jpeg", 
         "categoria": "Casual"
+    },
+     {
+        "id": 5, 
+        "nombre": "Pijama Frio", 
+        "precio": 55000, 
+        "precio_antes": 80000,
+        "imagen": "casa.jpeg", 
+        "categoria": "Casual"
+    },
+     {
+        "id": 5, 
+        "nombre": "Pantalon", 
+        "precio": 30000, 
+        "precio_antes": 65000,
+        "imagen": "alto.jpeg", 
+        "categoria": "Pantalon"
+    },
+    {
+        "id": 5, 
+        "nombre": "Camisas Cuello Alto", 
+        "precio": 30000, 
+        "precio_antes": 42000,
+        "imagen": "cuello.jpeg", 
+        "categoria": "Camisas"
     }
 ]
 
@@ -71,5 +95,6 @@ if __name__ == '__main__':
     # Esto es para que funcione en Railway o localmente
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
 
 
