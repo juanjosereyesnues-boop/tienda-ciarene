@@ -35,7 +35,15 @@ CATALOGO = [
         "precio": 80000, 
         "precio_antes": 110000,
         "imagen": "sudadera.png", 
-        "categoria": "Suadera"
+        "categoria": "Deportivo"
+    },
+    {
+        "id": 5, 
+        "nombre": "Pijama Estilo", 
+        "precio": 35000, 
+        "precio_antes": 60000,
+        "imagen": "estilo.jpeg", 
+        "categoria": "Deportivo"
     }
 ]
 
@@ -63,3 +71,4 @@ if __name__ == '__main__':
     # Esto es para que funcione en Railway o localmente
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
