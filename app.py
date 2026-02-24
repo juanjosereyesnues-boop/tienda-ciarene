@@ -9,7 +9,7 @@ CATALOGO = [
     {"id": 2, "nombre": "Pantalón Premium", "precio": 85000, "imagen": "pantalon.png", "categoria": "Pantalones"},
     {"id": 3, "nombre": "Pijama Seda", "precio": 65000, "imagen": "pijama.png", "categoria": "Casual"},
     {"id": 4, "nombre": "Sudadera Sport", "precio": 75000, "imagen": "sudadera.png", "categoria": "Deportivo"},
-    {"id": 5, "nombre": "Pijama Estilo", "precio": 35000, "imagen": "pijama2.png", "categoria": "Casual"}
+    {"id": 5, "nombre": "Pijama Estilo", "precio": 35000, "imagen": "estilo.png", "categoria": "Casual"}
 ]
 
 @app.route('/')
@@ -32,6 +32,7 @@ def send_report(path):
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
 
 
 
