@@ -89,6 +89,9 @@
         .logo-footer span { color: var(--p); }
 
         #cart-count { background: var(--p); padding: 2px 10px; border-radius: 10px; font-size: 0.9rem; margin-left: 5px; }
+        .img-wrapper img {
+    transition: opacity 0.3s ease, transform 0.8s ease; /* Añadimos opacity */
+}
     </style>
 </head>
 <body>
@@ -132,33 +135,53 @@
         }
 
         function displayProducts(products) {
-            const container = document.getElementById('lista-productos');
-            container.innerHTML = products.map((p, i) => {
-                // Lógica para detectar si hay oferta
-                const tieneOferta = p.precio_antes && p.precio_antes > p.precio;
+    const container = document.getElementById('lista-productos');
+    container.innerHTML = products.map((p, i) => {
+        const tieneOferta = p.precio_antes && p.precio_antes > p.precio;
+        
+        // Si no tiene lista de imágenes, usamos la imagen única para no dañar nada
+        const fotos = p.imagenes || [p.imagen]; 
+        
+        return `
+        <div class="card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s">
+            <div class="img-wrapper" id="wrapper-${p.id}">
+                ${tieneOferta ? `<div class="sale-tag">OFERTA</div>` : ''}
+                <div class="badge">$${p.precio.toLocaleString()}</div>
                 
-                return `
-                <div class="card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s">
-                    <div class="img-wrapper">
-                        ${tieneOferta ? `<div class="sale-tag">OFERTA</div>` : ''}
-                        <div class="badge">$${p.precio.toLocaleString()}</div>
-                        <img src="${p.imagen}" onerror="this.src='https://images.unsplash.com/photo-1445205170230-053b830c6050?w=500'">
+                <img src="${fotos[0]}" id="main-img-${p.id}" onerror="this.src='https://images.unsplash.com/photo-1445205170230-053b830c6050?w=500'">
+                
+                ${fotos.length > 1 ? `
+                    <div style="position:absolute; bottom:15px; width:100%; display:flex; justify-content:center; gap:8px; z-index:10;">
+                        ${fotos.map((img, idx) => `
+                            <div onclick="changeImg(${p.id}, '${img}')" 
+                                 style="width:12px; height:12px; background:white; border-radius:50%; cursor:pointer; border:2px solid var(--p); box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                            </div>
+                        `).join('')}
                     </div>
-                    <div class="info">
-                        <small style="color:#aaa; font-weight:700; letter-spacing:2px;">${p.categoria || 'PREMIUM'}</small>
-                        <h3>${p.nombre}</h3>
-                        
-                        <div class="price-container">
-                            ${tieneOferta ? `<span class="old-price">$${p.precio_antes.toLocaleString()}</span>` : ''}
-                            <span class="price">$${p.precio.toLocaleString()}</span>
-                        </div>
-
-                        <button class="add-btn" onclick="addToCart(${p.id})">Añadir a la Bolsa</button>
-                    </div>
+                ` : ''}
+            </div>
+            <div class="info">
+                <small style="color:#aaa; font-weight:700; letter-spacing:2px;">${p.categoria || 'PREMIUM'}</small>
+                <h3>${p.nombre}</h3>
+                <div class="price-container">
+                    ${tieneOferta ? `<span class="old-price">$${p.precio_antes.toLocaleString()}</span>` : ''}
+                    <span class="price">$${p.precio.toLocaleString()}</span>
                 </div>
-            `}).join('');
-        }
+                <button class="add-btn" onclick="addToCart(${p.id})">Añadir a la Bolsa</button>
+            </div>
+        </div>
+    `}).join('');
+}
 
+// Función extra para cambiar la imagen al tocar los puntitos
+function changeImg(productId, newSrc) {
+    const imgElement = document.getElementById(`main-img-${productId}`);
+    imgElement.style.opacity = '0'; // Efecto de desvanecimiento
+    setTimeout(() => {
+        imgElement.src = newSrc;
+        imgElement.style.opacity = '1';
+    }, 200);
+}
         function filter(category) {
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.innerText === category);
@@ -202,5 +225,6 @@
     </script>
 </body>
 </html>
+
 
 
